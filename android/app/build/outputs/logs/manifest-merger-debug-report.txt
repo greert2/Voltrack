@@ -1,0 +1,84 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:1:1-11:12
+INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:1:1-11:12
+INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:1:1-11:12
+INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:1:1-11:12
+MERGED from [com.android.support:appcompat-v7:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.1.1.aar\48044c6a2cb1bedbdd81d0fc49b09a83\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-fragment:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\support-fragment-27.1.1.aar\76df3ca4e3802be1de838b807d86338e\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:animated-vector-drawable:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.1.1.aar\ecd08e71359b35faafdc64bcd9a56417\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-ui:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.1.1.aar\ccb236b36a2343742063dbcfcf589bf5\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-core-utils:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.1.1.aar\2c0583e38924521d30f4b3c317da23fe\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-vector-drawable:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.1.1.aar\2f8ea5d68b717bcadc3b4ea0ae367314\AndroidManifest.xml:17:1-22:12
+MERGED from [com.android.support:support-compat:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\support-compat-27.1.1.aar\839372a40c8fe310d099838a3134a36e\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.0.aar\5fd3f8851dc48ac663c3bd5a8e787ef1\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:viewmodel:1.1.0] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\viewmodel-1.1.0.aar\300c33c24f2ed6b80d2211fa67a97fda\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.lifecycle:runtime:1.1.0] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\8f4c4e4a6403e74ce293730e33803e10\AndroidManifest.xml:17:1-22:12
+MERGED from [android.arch.core:runtime:1.1.0] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\8e66a4b73eadafd0f035dbef82e90e42\AndroidManifest.xml:17:1-22:12
+INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:1:1-11:12
+INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:1:1-11:12
+INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:1:1-11:12
+	package
+		ADDED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:2:5-52
+		INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml
+	android:versionName
+		INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:1:1-11:12
+		INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml
+	android:versionCode
+		INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:1:1-11:12
+		INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:1:11-69
+application
+ADDED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:4:5-10:43
+	android:supportsRtl
+		ADDED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:9:9-35
+	android:label
+		ADDED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:7:9-41
+	android:roundIcon
+		ADDED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:8:9-54
+	android:icon
+		ADDED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:6:9-43
+	android:allowBackup
+		ADDED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:5:9-35
+	android:theme
+		ADDED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml:10:9-40
+uses-sdk
+INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml
+MERGED from [com.android.support:appcompat-v7:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.1.1.aar\48044c6a2cb1bedbdd81d0fc49b09a83\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:appcompat-v7:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\appcompat-v7-27.1.1.aar\48044c6a2cb1bedbdd81d0fc49b09a83\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\support-fragment-27.1.1.aar\76df3ca4e3802be1de838b807d86338e\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-fragment:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\support-fragment-27.1.1.aar\76df3ca4e3802be1de838b807d86338e\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.1.1.aar\ecd08e71359b35faafdc64bcd9a56417\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:animated-vector-drawable:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-27.1.1.aar\ecd08e71359b35faafdc64bcd9a56417\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.1.1.aar\ccb236b36a2343742063dbcfcf589bf5\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-ui:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\support-core-ui-27.1.1.aar\ccb236b36a2343742063dbcfcf589bf5\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.1.1.aar\2c0583e38924521d30f4b3c317da23fe\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-core-utils:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\support-core-utils-27.1.1.aar\2c0583e38924521d30f4b3c317da23fe\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.1.1.aar\2f8ea5d68b717bcadc3b4ea0ae367314\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-vector-drawable:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-27.1.1.aar\2f8ea5d68b717bcadc3b4ea0ae367314\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\support-compat-27.1.1.aar\839372a40c8fe310d099838a3134a36e\AndroidManifest.xml:20:5-44
+MERGED from [com.android.support:support-compat:27.1.1] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\support-compat-27.1.1.aar\839372a40c8fe310d099838a3134a36e\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.0.aar\5fd3f8851dc48ac663c3bd5a8e787ef1\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:livedata-core:1.1.0] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.0.aar\5fd3f8851dc48ac663c3bd5a8e787ef1\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.0] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\viewmodel-1.1.0.aar\300c33c24f2ed6b80d2211fa67a97fda\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:viewmodel:1.1.0] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\viewmodel-1.1.0.aar\300c33c24f2ed6b80d2211fa67a97fda\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.0] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\8f4c4e4a6403e74ce293730e33803e10\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.lifecycle:runtime:1.1.0] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\8f4c4e4a6403e74ce293730e33803e10\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.0] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\8e66a4b73eadafd0f035dbef82e90e42\AndroidManifest.xml:20:5-44
+MERGED from [android.arch.core:runtime:1.1.0] C:\Users\Carlos Silva\.gradle\caches\transforms-1\files-1.1\runtime-1.1.0.aar\8e66a4b73eadafd0f035dbef82e90e42\AndroidManifest.xml:20:5-44
+INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml
+INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml
+		ADDED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml
+		INJECTED from C:\Users\Carlos Silva\Documents\Western\491_csci\project\volunteer\android\app\src\main\AndroidManifest.xml
