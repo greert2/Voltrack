@@ -18,21 +18,16 @@ void func(int sockfd)
 
     while (done) { 
         bzero(buff, MAX); 
-  
+
+        /* Read from client */
         read(sockfd, buff, sizeof(buff)); 
-  
-        printf("From client: %s\t To client : ", buff); 
-        bzero(buff, MAX); 
-        n = 0; 
-        while ((buff[n++] = getchar()) != '\n') 
-            ; 
-  
-        
-        write(sockfd, buff, sizeof(buff)); 
-  
-        if (strncmp("exit", buff, 4) == 0) { 
-            printf("Server Exit...\n"); 
-            break; 
+        if (strncmp("auth", buff, 4) == 0) { 
+            /* Client is requesting authorization */
+            printf("Authorizing...\n"); 
+            bzero(buff, MAX); 
+            strncpy(buff, "Authorized", 11);
+            /* Authorize client */
+            write(sockfd, buff, sizeof(buff)); 
         } 
     } 
 } 
@@ -41,6 +36,9 @@ int main()
 { 
     int sockfd, connfd, len; 
     struct sockaddr_in servaddr, cli; 
+    pid_t childpid; /* an int to determine which process is a child process */
+    int optval = 1; /* boolean value when we set socket option */
+
   
     sockfd = socket(AF_INET, SOCK_STREAM, 0); 
     if (sockfd == -1) { 
@@ -54,6 +52,12 @@ int main()
     servaddr.sin_family = AF_INET; 
     servaddr.sin_addr.s_addr = htonl(INADDR_ANY); 
     servaddr.sin_port = htons(PORT); 
+
+    /* Allow reuse of port */
+	if( setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0 ) {
+		fprintf(stderr, "Error Setting socket option failed\n");
+		exit(EXIT_FAILURE);
+	}
   
     if ((bind(sockfd, (SA*)&servaddr, sizeof(servaddr))) != 0) { 
         printf("socket bind failed...\n"); 
@@ -68,17 +72,25 @@ int main()
     } 
     else
         printf("Server listening..\n"); 
-    len = sizeof(cli); 
-  
-    connfd = accept(sockfd, (SA*)&cli, &len); 
-    if (connfd < 0) { 
-        printf("server acccept failed...\n"); 
-        exit(0); 
-    } 
-    else
-        printf("server acccept the client...\n"); 
-  
-    func(connfd); 
-  
-    close(sockfd); 
+        len = sizeof(cli); 
+        while(1) {
+                connfd = accept(sockfd, (SA*)&cli, &len); 
+                if (connfd < 0) { 
+                    printf("server acccept failed...\n"); 
+                    exit(0); 
+                } 
+                else{
+                    printf("server acccept the client...\n"); 
+                    /* For handling multiple clients at once: */
+                    /* Fork the process after accepting the client */
+                    if((childpid = fork()) == 0) {
+                        /* We are the child process */
+                        close(sockfd); /* Close the old socket descriptor on the child process */
+                        func(connfd); 
+                    }
+                }
+            }
+        
+        close(connfd); 
 } 
+
