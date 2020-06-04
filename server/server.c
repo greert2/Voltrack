@@ -6,6 +6,7 @@
 #include <sys/socket.h> 
 #include <sys/types.h> 
 #include <stdbool.h>
+#include <unistd.h>
 #define MAX 80 
 #define PORT 8080 
 #define SA struct sockaddr 
