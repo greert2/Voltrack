@@ -1,21 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { View } from "react-native";
+import LoginScreen from './app/screens/LoginScreen';
+import MapScreen from './app/screens/MapScreen';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Hello Carlos World</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+  return <LoginScreen />;
+  //return <MapScreen />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
