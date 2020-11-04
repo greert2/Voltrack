@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 function MapScreen(props) {
@@ -8,11 +9,12 @@ function MapScreen(props) {
          provider={PROVIDER_GOOGLE}
          showsUserLocation
          initialRegion={{
-         latitude: 37.78825,
-         longitude: -122.4324,
+         latitude: 48.769768,
+         longitude: -122.485886,
          latitudeDelta: 0.0922,
          longitudeDelta: 0.0421}}
       />
+      
     );
 }
 
