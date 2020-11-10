@@ -45,7 +45,7 @@ const MainScreen = () => {
                 <TouchableOpacity
                 style={styles.buttonTouchableOpacity}
                     onPress={() => {
-                        Actions.MapScreen()
+                        Actions.RegisterScreen()
                     }}
                 >
                 <Text style={styles.btnTextWhite}>Register</Text>
