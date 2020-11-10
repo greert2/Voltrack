@@ -5,6 +5,7 @@ import mainScreen from './app/screens/MainScreen';
 import loginScreen from './app/screens/LoginScreen';
 import mapScreen from './app/screens/MapScreen';
 import createEventScreen from './app/screens/CreateEventScreen';
+import registerScreen from './app/screens/RegisterScreen';
 
 export default function App() {
   return <mainScreen />;
@@ -18,6 +19,7 @@ App = () => (
       <Scene key="MapScreen" component={mapScreen} hideNavBar />
       <Scene key="LoginScreen" component={loginScreen} hideNavBar />
       <Scene key="CreateEventScreen" component={createEventScreen} hideNavBar />
+      <Scene key="RegisterScreen" component={registerScreen} hideNavBar />
     </Scene>
   </Router>
 );
