@@ -51,17 +51,6 @@ const MainScreen = () => {
                 <Text style={styles.btnTextWhite}>Register</Text>
                 </TouchableOpacity>
             </View>
-             {/* Create Event Button */}
-            <View style={styles.createEventButton}>
-                <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                    onPress={() => {
-                        Actions.CreateEventScreen()
-                    }}
-                >
-                    <Text style={styles.btnTextWhite}>Create Event</Text>
-                </TouchableOpacity>
-            </View>
         </ImageBackground>
         
     );
@@ -90,14 +79,6 @@ const styles = StyleSheet.create({
         height: 80,
         // backgroundColor: "#403540", //#403540
         backgroundColor: "rgba(0,0,0,0.5)",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    createEventButton: {
-        width: "100%",
-        height: 80,
-        // backgroundColor: "#403540", //#403540
-        backgroundColor: "rgba(0,0,0,0.7)",
         justifyContent: "center",
         alignItems: "center",
     },

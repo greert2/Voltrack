@@ -1,11 +1,22 @@
-import React from 'react';
-import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacity} from 'react-native';
+import React, { useState } from 'react';
+import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacity, FlatList} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Actions, Router, Scene } from "react-native-router-flux";
 import { TextInput } from 'react-native-gesture-handler';
 
 
 function LoginScreen(props) {
+    const [people, setPeople] = useState([
+        { name: 'Hao', key: '1'},
+        { name: 'Tyler', key: '2'},
+        { name: 'Carlos', key: '3'},
+        { name: 'Laura', key: '4'},
+        { name: 'Hao', key: '5'},
+        { name: 'Tyler', key: '6'},
+        { name: 'Carlos', key: '7'},
+        { name: 'Laura', key: '8'},
+    ]);
+
     return (
         <ImageBackground 
             style={styles.background} 
@@ -27,50 +38,54 @@ function LoginScreen(props) {
             />
             <View style={styles.container}>
                 <Image style={styles.image} source={require('../assets/voltrackLogo.png')}/>
-                <Text style={styles.logo}>Log In</Text>
-                <View style={styles.mainPanel}>
-                    {/* Username Textbox */}
-                    <TextInput
-                        style={styles.inputBox}
-                        placeholder="Username"
-                        placeholderTextColor={'black'}
-                    />
-                    {/* Password Textbox */}
-                    <TextInput
-                        style={styles.inputBox}
-                        placeholder="Password"
-                        placeholderTextColor={'black'}
-                        secureTextEntry={true}
-                    />
-                </View>
+                <FlatList 
+                    data={people}
+                    renderItem={({ item }) => (
+                    <Text style={styles.item}>{item.name}</Text>
+                )}
+                />
             </View>
-             {/* Login Button */}
-             <View style={styles.loginButton}>
+            <View style={styles.buttonContainer}>
+            {/* Join Event Button */}
+            <View style={styles.JoinEventButton}>
                 <TouchableOpacity
                 style={styles.buttonTouchableOpacity}
                     onPress={() => {
-                        alert("log in!")
-                        Actions.HomeScreen()
+                        Actions.JoinEventScreen()
                     }}
                 >
-                    <Text style={styles.btnTextWhite}>Login</Text>
+                    <Text style={styles.btnTextWhite}>Join Event</Text>
                 </TouchableOpacity>
             </View>
-            {/* Back Button */}
-            <View style={styles.backButton}>
+            {/* Create Event Button */}
+             <View style={styles.CreateEventButton}>
                 <TouchableOpacity
                 style={styles.buttonTouchableOpacity}
                     onPress={() => {
-                        Actions.pop()
+                        Actions.CreateEventScreen()
                     }}
                 >
-                <Text style={styles.btnTextWhite}>Back</Text>
+                    <Text style={styles.btnTextWhite}>Create Event</Text>
                 </TouchableOpacity>
             </View>
+            </View> 
+            {/* Profile Button */}
+            <View style={styles.profileButton}>
+                <TouchableOpacity
+                style={styles.buttonTouchableOpacity}
+                    onPress={() => {
+                        Actions.MainScreen()
+                    }}
+                >
+                <Image style={styles.image} source={require('../assets/profilePic.png')}/>
+                </TouchableOpacity>
+            </View>
+
         </ImageBackground>
         
     );
 }
+
 
 const styles = StyleSheet.create({
     background: {
@@ -86,19 +101,27 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         textAlign: "center",
     },
-    loginButton: {
-        width: '100%',
+    CreateEventButton: {
+        width: '50%',
         height: 70,
         backgroundColor: "rgba(0,0,0,0.3)",
-        alignItems: "center",
         justifyContent: "center",
+        alignItems: "center",
     },
-    backButton: {
-        width: "100%",
-        height: 80,
-        backgroundColor: "rgba(0,0,0,0.5)",
+    JoinEventButton: {
+        width: '50%',
+        height: 70,
+        backgroundColor: "rgba(0,0,0,0.3)",
         justifyContent: "center",
         alignItems: "center",
+    },
+    profileButton: {
+        position: 'absolute',
+        width: "25%",
+        height: 50,
+        top: 50,
+        left: 0,
+        backgroundColor: "rgba(0,0,0,0)",
     },
     buttonTouchableOpacity: {
         width: "100%",
@@ -114,17 +137,22 @@ const styles = StyleSheet.create({
         color: "gray",
         fontSize: 24,
     },
-    logo: {
-        marginTop: 40,
-        fontSize: 24,
-        fontWeight: "bold",
-        color: "black",
-    },
     container: {
         position: 'absolute',
         top: 70,
         alignItems: "center",
-        width: "100%"
+        width: "100%",
+        // flex: 1,
+        // paddingTop: 40,
+        // paddingHorizontal: 20,
+    },
+    buttonContainer: {
+        position: 'absolute',
+        alignItems: "center",
+        width: "100%",
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     mainPanel: {
         marginTop: 70,
@@ -136,6 +164,15 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 100,
         resizeMode: "contain",
+    },
+    item: {
+        color: "white",
+        flex: 1,
+        marginHorizontal: 10,
+        marginTop: 24,
+        padding: 30,
+        backgroundColor: 'pink',
+        fontSize: 24,
     }
 });
 

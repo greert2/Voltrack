@@ -27,33 +27,33 @@ function LoginScreen(props) {
             />
             <View style={styles.container}>
                 <Image style={styles.image} source={require('../assets/voltrackLogo.png')}/>
-                <Text style={styles.logo}>Log In</Text>
+                <Text style={styles.logo}>Join Event</Text>
                 <View style={styles.mainPanel}>
                     {/* Username Textbox */}
                     <TextInput
                         style={styles.inputBox}
-                        placeholder="Username"
+                        placeholder="Event ID"
                         placeholderTextColor={'black'}
                     />
                     {/* Password Textbox */}
                     <TextInput
                         style={styles.inputBox}
-                        placeholder="Password"
+                        placeholder="Passcode"
                         placeholderTextColor={'black'}
                         secureTextEntry={true}
                     />
                 </View>
             </View>
-             {/* Login Button */}
-             <View style={styles.loginButton}>
+             {/* Join Event Button */}
+             <View style={styles.joinEventButton}>
                 <TouchableOpacity
                 style={styles.buttonTouchableOpacity}
                     onPress={() => {
-                        alert("log in!")
+                        alert("Event Joined!")
                         Actions.HomeScreen()
                     }}
                 >
-                    <Text style={styles.btnTextWhite}>Login</Text>
+                    <Text style={styles.btnTextWhite}>Join Event</Text>
                 </TouchableOpacity>
             </View>
             {/* Back Button */}
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         textAlign: "center",
     },
-    loginButton: {
+    joinEventButton: {
         width: '100%',
         height: 70,
         backgroundColor: "rgba(0,0,0,0.3)",

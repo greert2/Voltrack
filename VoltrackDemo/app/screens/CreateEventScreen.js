@@ -55,6 +55,7 @@ function CreateEventScreen(props) {
                 style={styles.buttonTouchableOpacity}
                     onPress={() => {
                         alert("Event Created!")
+                        Actions.HomeScreen()
                     }}
                 >
                     <Text style={styles.btnTextWhite}>Create Event</Text>
