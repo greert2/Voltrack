@@ -11,10 +11,6 @@ function LoginScreen(props) {
         { name: 'Tyler', key: '2'},
         { name: 'Carlos', key: '3'},
         { name: 'Laura', key: '4'},
-        { name: 'Hao', key: '5'},
-        { name: 'Tyler', key: '6'},
-        { name: 'Carlos', key: '7'},
-        { name: 'Laura', key: '8'},
     ]);
 
     return (
