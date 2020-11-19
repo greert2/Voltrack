@@ -49,8 +49,7 @@ function LoginScreen(props) {
                 <TouchableOpacity
                 style={styles.buttonTouchableOpacity}
                     onPress={() => {
-                        alert("Event Joined!")
-                        Actions.HomeScreen()
+                        Actions.EventInfoScreen()
                     }}
                 >
                     <Text style={styles.btnTextWhite}>Join Event</Text>
