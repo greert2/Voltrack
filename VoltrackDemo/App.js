@@ -7,6 +7,7 @@ import createEventScreen from './app/screens/CreateEventScreen';
 import registerScreen from './app/screens/RegisterScreen';
 import homeScreen from './app/screens/HomeScreen';
 import joinEventScreen from './app/screens/JoinEventScreen';
+import eventInfoScreen from './app/screens/EventInfoScreen';
 
 export default function App() {
   return <mainScreen />;
@@ -22,6 +23,7 @@ App = () => (
       <Scene key="RegisterScreen" component={registerScreen} hideNavBar />
       <Scene key="HomeScreen" component={homeScreen} hideNavBar />
       <Scene key="JoinEventScreen" component={joinEventScreen} hideNavBar />
+      <Scene key="EventInfoScreen" component={eventInfoScreen} hideNavBar />
 
     </Scene>
   </Router>
