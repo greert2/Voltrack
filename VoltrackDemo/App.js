@@ -8,8 +8,37 @@ import registerScreen from './app/screens/RegisterScreen';
 import homeScreen from './app/screens/HomeScreen';
 import joinEventScreen from './app/screens/JoinEventScreen';
 import eventInfoScreen from './app/screens/EventInfoScreen';
+import userSettingsScreen from './app/screens/UserSettings';
+import socketIO from 'socket.io-client';
+
 
 export default function App() {
+
+  //componentDidMount() {
+    // Create Socket connection to server
+    const socket = socketIO('http://192.168.1.20:3000', {
+        transports: ['websocket'], jsonp: false
+    });
+    socket.connect();
+    socket.on('connect', () => {
+      console.log('Connected to server.');
+    });
+
+  //}
+
+    
+    socket.on('update', () => {
+        //console.log("update");
+        alert("test")
+    });
+    // Set Application State
+    this.setState({
+      socket: socket,
+    });
+
+    global.socket = socket;
+
+
   return <mainScreen />;
 };
 
@@ -24,7 +53,7 @@ App = () => (
       <Scene key="HomeScreen" component={homeScreen} hideNavBar />
       <Scene key="JoinEventScreen" component={joinEventScreen} hideNavBar />
       <Scene key="EventInfoScreen" component={eventInfoScreen} hideNavBar />
-
+      <Scene key="UserSettingsScreen" component={userSettingsScreen} hideNavBar />
     </Scene>
   </Router>
 );

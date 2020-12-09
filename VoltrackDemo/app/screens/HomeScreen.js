@@ -70,7 +70,7 @@ function LoginScreen(props) {
                 <TouchableOpacity
                 style={styles.buttonTouchableOpacity}
                     onPress={() => {
-                        Actions.MainScreen()
+                        Actions.UserSettingsScreen();
                     }}
                 >
                 <Image style={styles.image} source={require('../assets/profilePic.png')}/>

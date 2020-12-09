@@ -1,0 +1,13 @@
+<h1 style="font-family: Arial, Helvetica, sans-serif;">Voltrack Server - Control Panel</h1>
+
+<button>Update</button>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io();
+    var button = document.querySelector('button');
+    button.onclick = function() {
+        console.log("Sending update");
+        socket.emit('update');
+    }
+</script>

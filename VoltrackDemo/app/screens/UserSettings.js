@@ -3,39 +3,19 @@ import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacit
 import { LinearGradient } from 'expo-linear-gradient';
 import { Actions, Router, Scene } from "react-native-router-flux";
 import { TextInput } from 'react-native-gesture-handler';
-import socketIO from 'socket.io-client';
+// import { Dropdown } from 'react-native-material-dropdown-v2';
+import { Picker } from '@react-native-picker/picker';
 
 
-
-
-function LoginScreen(props) {
-   
-
-   /* Connect to server here
-   TODO: move this somewhere else in the application. We want to keep the connection running
-   throughout the entirety of the application's life, not just on this login screen. */
-
-    const socket = socketIO('http://192.168.1.12:3000', {  // NOTE: change this to your local IP
-        transports: ['websocket'], jsonp: false
-    });
-    socket.connect();
-    socket.on('connect', () => {
-      console.log('Connected to server.');
-    });
-
-    /* Update event: upon click on Server Control Panel, gives alert on phone */
-    socket.on('update', () => {
-        //console.log("update");
-        alert("test")
-    });
-    
-
+function UserSettings(props) {
     return (
         <ImageBackground 
             style={styles.background} 
             source={require('../assets/splash.png')}
         >
             <LinearGradient
+                // Background Linear Gradient
+                // colors={['#f94244', '#ff9f3e']}
                 colors={['rgba(255,78,80,1)', 'rgba(249,212,35,1)']}
                 start={{ x: 0, y: 0.75 }}
                 end={{ x: 0, y: 1 }}
@@ -48,50 +28,79 @@ function LoginScreen(props) {
                 }}
             />
             <View style={styles.container}>
-                <Image style={styles.image} source={require('../assets/voltrackLogo.png')}/>
-                <Text style={styles.logo}>Log In</Text>
+                {/* Back Button */}
+                <View style={styles.backButton}>
+                    <TouchableOpacity
+                    style={styles.buttonTouchableOpacity}
+                        onPress={() => {
+                            Actions.pop()
+                        }}
+                    >
+                    <Text style={styles.btnTextBlack, {fontSize: 30, marginLeft: 15}}>&larr;</Text>
+                    </TouchableOpacity>
+                </View>
+                <Image style={styles.image} source={require('../assets/profile.png')}/>
+                <Text style={styles.nameText}>Test Name</Text>
                 <View style={styles.mainPanel}>
-                    {/* Username Textbox */}
+                    <Text style={{marginBottom:-70, marginLeft: -200}}>I am currently...</Text>
+                    {/* Dropdown Status Selector */}
+                    <Picker
+                        // selectedValue={this.state.status}
+                        style={{height: 50, width: 100, marginBottom: 170}}
+                        //onValueChange={(itemValue, itemIndex) =>
+                            //toggleSwitch = () => {
+                                //this.setState({status: itemValue})
+                            //}
+                            
+                        //}
+                        >
+                        <Picker.Item label="Task #1" value="task1" />
+                        <Picker.Item label="Task #2" value="task2" />
+                        <Picker.Item label="Task #3" value="task3" />
+                        <Picker.Item label="Task #4" value="task4" />
+                        <Picker.Item label="Task #5" value="task5" />
+                    </Picker>
+                    <Text style={{marginLeft: -200}}>Contact Information</Text>
+                    {/* Name Textbox */}
                     <TextInput
                         style={styles.inputBox}
-                        placeholder="Username"
+                        placeholder="Test Name"
                         placeholderTextColor={'black'}
                     />
-                    {/* Password Textbox */}
+                    {/* Phone Textbox */}
                     <TextInput
                         style={styles.inputBox}
-                        placeholder="Password"
+                        placeholder="(555) 555-1234"
                         placeholderTextColor={'black'}
                         secureTextEntry={true}
                     />
                 </View>
+                
+                    
             </View>
-             {/* Login Button */}
-             <View style={styles.loginButton}>
+
+            
+            
+            
+             {/* <View style={styles.loginButton}>
                 <TouchableOpacity
                 style={styles.buttonTouchableOpacity}
                     onPress={() => {
-                        if(socket.connected) {
-                            socket.emit('auth');
-                            socket.on('authorized', () => {
-                                alert("log in!");
-                                Actions.HomeScreen();
-                            });
-                        }
+                        alert("log in!")
                     }}
                 >
                     <Text style={styles.btnTextWhite}>Login</Text>
                 </TouchableOpacity>
-            </View>
-            {/* Back Button */}
-            <View style={styles.backButton}>
+            </View> */}
+            {/* Delete Button */}
+            <View style={styles.deleteButton}>
                 <TouchableOpacity
                 style={styles.buttonTouchableOpacity}
                     onPress={() => {
                         Actions.pop()
                     }}
                 >
-                <Text style={styles.btnTextWhite}>Back</Text>
+                <Text style={styles.btnTextWhite}>Delete Account</Text>
                 </TouchableOpacity>
             </View>
         </ImageBackground>
@@ -113,6 +122,12 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         textAlign: "center",
     },
+    backButton: {
+        width: '10%',
+        height: 40,
+        position: 'absolute',
+        alignSelf: 'flex-start',
+    },
     loginButton: {
         width: '100%',
         height: 70,
@@ -120,7 +135,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
     },
-    backButton: {
+    deleteButton: {
         width: "100%",
         height: 80,
         backgroundColor: "rgba(0,0,0,0.5)",
@@ -138,13 +153,12 @@ const styles = StyleSheet.create({
         fontSize: 24,
     },
     btnTextBlack: {
-        color: "gray",
+        color: "black",
         fontSize: 24,
     },
-    logo: {
-        marginTop: 40,
+    nameText: {
+        marginTop: 20,
         fontSize: 24,
-        fontWeight: "bold",
         color: "black",
     },
     container: {
@@ -162,8 +176,11 @@ const styles = StyleSheet.create({
     image: {
         flex: 1,
         height: 100,
+        width: 100,
         resizeMode: "contain",
+        backgroundColor: "black",
+        borderRadius: 10,
     }
 });
 
-export default LoginScreen;
+export default UserSettings;
