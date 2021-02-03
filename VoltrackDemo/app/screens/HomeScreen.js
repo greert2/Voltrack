@@ -5,13 +5,15 @@ import { Actions, Router, Scene } from "react-native-router-flux";
 import { TextInput } from 'react-native-gesture-handler';
 
 
-function LoginScreen(props) {
+function HomeScreen(props) {
+    
     const [people, setPeople] = useState([
         { name: 'Hao', key: '1'},
         { name: 'Tyler', key: '2'},
         { name: 'Carlos', key: '3'},
         { name: 'Laura', key: '4'},
     ]);
+    
 
     return (
         <ImageBackground 
@@ -20,7 +22,6 @@ function LoginScreen(props) {
         >
             <LinearGradient
                 // Background Linear Gradient
-                // colors={['#f94244', '#ff9f3e']}
                 colors={['rgba(255,78,80,1)', 'rgba(249,212,35,1)']}
                 start={{ x: 0, y: 0.75 }}
                 end={{ x: 0, y: 1 }}
@@ -34,6 +35,7 @@ function LoginScreen(props) {
             />
             <View style={styles.container}>
                 <Image style={styles.image} source={require('../assets/voltrackLogo.png')}/>
+                <Text style={styles.text}>Welcome</Text>
                 <FlatList 
                     data={people}
                     renderItem={({ item }) => (
@@ -172,4 +174,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default LoginScreen;
+export default HomeScreen;

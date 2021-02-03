@@ -35,7 +35,7 @@ const MainScreen = () => {
                         Actions.LoginScreen()
                     }}
                 >
-                    <Text style={styles.btnTextWhite}>Login</Text>
+                    <Text style={styles.btnTextWhite}>Log in</Text>
 
                 </TouchableOpacity>
                 
