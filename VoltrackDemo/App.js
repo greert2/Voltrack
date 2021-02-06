@@ -14,29 +14,14 @@ import socketIO from 'socket.io-client';
 
 export default function App() {
 
-  //componentDidMount() {
-    // Create Socket connection to server
-    const socket = socketIO('http://192.168.1.20:3000', {
-        transports: ['websocket'], jsonp: false
-    });
-    socket.connect();
-    socket.on('connect', () => {
-      console.log('Connected to server.');
-    });
+    // NOTE: we should probably connect to the server here ONE TIME, and then pass the connection
+    //      between the screeens.
 
-  //}
+    // Connect to server here (DOES NOT WORK)
+    // var connection = require('./app/scripts/serverConnection.js');
+    // connection.connect();
 
-    
-    socket.on('update', () => {
-        //console.log("update");
-        alert("test")
-    });
-    // Set Application State
-    this.setState({
-      socket: socket,
-    });
-
-    global.socket = socket;
+    // global.socket = connection;
 
 
   return <mainScreen />;

@@ -47,7 +47,7 @@ class LoginScreen extends Component {
                         style={styles.inputBox}
                         placeholder="Username"
                         placeholderTextColor={'black'}
-                        autoCapitalize={false}
+                        autoCapitalize={"none"}
                         secureTextEntry={false}
                         onChangeText={(username) => this.setState({username})}
                     />
@@ -56,7 +56,7 @@ class LoginScreen extends Component {
                         style={styles.inputBox}
                         placeholder="Password"
                         placeholderTextColor={'black'}
-                        autoCapitalize={false}
+                        autoCapitalize={"none"}
                         secureTextEntry={true}
                         onChangeText={(password) => this.setState({password})}
                     />
@@ -72,7 +72,7 @@ class LoginScreen extends Component {
                         socket.on('authorized', (res) => {
                             if(res === true) {
                                 socket.off('authorized'); // remove this listener now, we're done
-                                Actions.HomeScreen({username: this.state.username});
+                                Actions.HomeScreen({username: this.state.username, socket: connection});
                             }else {
                                 socket.off('authorized'); // remove this listener now, we're done
                                 alert("This username/password combination is not correct.");
