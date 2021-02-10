@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacity} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Actions, Router, Scene } from "react-native-router-flux";
@@ -8,27 +8,18 @@ import socketIO from 'socket.io-client';
 
 
 
-function LoginScreen(props) {
-   
+class LoginScreen extends Component {
 
-   /* Connect to server here
-   TODO: move this somewhere else in the application. We want to keep the connection running
-   throughout the entirety of the application's life, not just on this login screen. */
+    state = {
+        username: '',
+        password: ''
+    }
 
-    const socket = socketIO('http://192.168.1.12:3000', {  // NOTE: change this to your local IP
-        transports: ['websocket'], jsonp: false
-    });
-    socket.connect();
-    socket.on('connect', () => {
-      console.log('Connected to server.');
-    });
+    render () {
 
-    /* Update event: upon click on Server Control Panel, gives alert on phone */
-    socket.on('update', () => {
-        //console.log("update");
-        alert("test")
-    });
-    
+        // Connect to server here
+        var connection = require('../scripts/serverConnection.js');
+        connection.connect();
 
     return (
         <ImageBackground 
@@ -56,13 +47,18 @@ function LoginScreen(props) {
                         style={styles.inputBox}
                         placeholder="Username"
                         placeholderTextColor={'black'}
+                        autoCapitalize={false}
+                        secureTextEntry={false}
+                        onChangeText={(username) => this.setState({username})}
                     />
                     {/* Password Textbox */}
                     <TextInput
                         style={styles.inputBox}
                         placeholder="Password"
                         placeholderTextColor={'black'}
+                        autoCapitalize={false}
                         secureTextEntry={true}
+                        onChangeText={(password) => this.setState({password})}
                     />
                 </View>
             </View>
@@ -71,16 +67,21 @@ function LoginScreen(props) {
                 <TouchableOpacity
                 style={styles.buttonTouchableOpacity}
                     onPress={() => {
-                        if(socket.connected) {
-                            socket.emit('auth');
-                            socket.on('authorized', () => {
-                                alert("log in!");
-                                Actions.HomeScreen();
-                            });
-                        }
+                        connection.authUser(this.state.username, this.state.password);
+                        var socket = connection.getSocket();
+                        socket.on('authorized', (res) => {
+                            if(res === true) {
+                                socket.off('authorized'); // remove this listener now, we're done
+                                Actions.HomeScreen({username: this.state.username});
+                            }else {
+                                socket.off('authorized'); // remove this listener now, we're done
+                                alert("This username/password combination is not correct.");
+                            }
+                                    
+                        });
                     }}
                 >
-                    <Text style={styles.btnTextWhite}>Login</Text>
+                    <Text style={styles.btnTextWhite}>Log in</Text>
                 </TouchableOpacity>
             </View>
             {/* Back Button */}
@@ -97,6 +98,8 @@ function LoginScreen(props) {
         </ImageBackground>
         
     );
+    }
+   
 }
 
 const styles = StyleSheet.create({
