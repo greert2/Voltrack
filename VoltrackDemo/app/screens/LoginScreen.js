@@ -47,7 +47,7 @@ class LoginScreen extends Component {
                         style={styles.inputBox}
                         placeholder="Username"
                         placeholderTextColor={'black'}
-                        autoCapitalize={false}
+                        autoCapitalize={"none"}
                         secureTextEntry={false}
                         onChangeText={(username) => this.setState({username})}
                     />
@@ -56,7 +56,7 @@ class LoginScreen extends Component {
                         style={styles.inputBox}
                         placeholder="Password"
                         placeholderTextColor={'black'}
-                        autoCapitalize={false}
+                        autoCapitalize={"none"}
                         secureTextEntry={true}
                         onChangeText={(password) => this.setState({password})}
                     />

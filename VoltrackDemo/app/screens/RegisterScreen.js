@@ -72,7 +72,7 @@ class RegisterScreen extends Component {
                             placeholder="Email"
                             placeholderTextColor={'black'}
                             secureTextEntry={false}
-                            autoCapitalize={false}
+                            autoCapitalize={"none"}
                             onChangeText={(email) => this.setState({email})}
                             value={this.state.email}
                         />
@@ -81,7 +81,7 @@ class RegisterScreen extends Component {
                             placeholder="Username"
                             placeholderTextColor={'black'}
                             secureTextEntry={false}
-                            autoCapitalize={false}
+                            autoCapitalize={"none"}
                             onChangeText={(username) => this.setState({username})}
                             value={this.state.username}
                         />
@@ -90,7 +90,7 @@ class RegisterScreen extends Component {
                             placeholder="Password"
                             placeholderTextColor={'black'}
                             secureTextEntry={true}
-                            autoCapitalize={false}
+                            autoCapitalize={"none"}
                             onChangeText={(password) => this.setState({password})}
                             value={this.state.password}
                         />
