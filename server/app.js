@@ -22,9 +22,9 @@ app.get('/', function(req, res) {
 
 // Connect to Database
 var sql_connection = mysql.createConnection({
-    host: '192.168.64.2', // Use the server address of XAMPP!
-    user: 'admin',
-    password: 'VoltrackDemo',
+    host: 'localhost', // Use the server address of XAMPP!
+    user: 'root',
+    password: 'Voltrack2021!DB',
     database: 'voltrack'
 });
 
@@ -57,6 +57,50 @@ let accountExists = function(username) {
 }
 
 
+// Returns 'result = false' if a user does not exist... Returns an error if the user does already exist
+let getAccountInfo = function(username) {
+    return new Promise(function(resolve, reject) {
+        console.log("Running: " + 'SELECT firstName, lastName, phone FROM users WHERE username = ' + username);
+        sql_connection.query('SELECT firstName, lastName, phone FROM users WHERE username = ?', username, function(err, results) {
+            if(err) {
+                console.log("Error selecting username: " + username);
+            }else {
+                console.log("size of res: " + results.length); // DEBUG
+                if(results.length > 0) {
+                    console.log("func: Got user."); // DEBUG
+                    resolve(results);
+                }else {
+                    reject(new Error("Could not retrieve user info."));
+                }
+            }
+        });
+    })
+}
+
+
+// Returns 'result = false' if an event does not exist... Returns an error if the event does already exist
+let eventExists = function(eventId) {
+    return new Promise(function(resolve, reject) {
+        sql_connection.query('SELECT id FROM events WHERE id = ?', eventId, function(err, results) {
+            if(err) {
+                console.log("Error selecting eventId: " + eventId);
+                var doesExist = true; // don't let them register event..just in case
+            }else {
+                // console.log("size of res: " + results.length);
+                if(results.length > 0) {
+                    // console.log("func: User already exists.");
+                    reject(new Error("Event with this id already exists"));
+                }else {
+                    // console.log("func: registering...");
+                    doesExist = false;
+                    resolve(doesExist); // no event with this Id exists
+                }
+            }
+        });
+    })
+}
+
+
 
 // Promises a hashed password (given it is used on a previously proven username)
 let getHashedPassFromDB = function(username) {
@@ -75,6 +119,32 @@ let getHashedPassFromDB = function(username) {
         });
     })
 }
+
+
+// // Generates a unique eventId
+// let generateUniqueEventId = function() {
+//     return new Promise(function(resolve, reject) {
+//         let eventId = generateId();
+//         let isIdUnique = false;
+
+//         eventExists(eventId)
+//         .then(function(result) {
+//             // Event does not exist
+//             console.log("The event with id: " + eventId + " does not exist."); // DEBUG
+//             isIdUnique = true;
+//             resolve(eventId);
+//             // fn(true);
+//         })
+//         .catch(function(err) {
+
+//             // Event already exists, generate new
+//             console.log("event exists already!");
+//             return generateUniqueId();
+//             // fn(false);
+            
+//         })
+//     })
+// }
 
 
 
@@ -123,13 +193,11 @@ io.on('connection', function(socket) {
                     console.log("Error getting hashed pass");
                 }
             })
-            // console.log("hashedPass: " + hashedPass);
+            // console.log("hashedPass: " + hashedPass); // DEBUG
             
             
         })
     });
-
-
 
     // Attempt to register an account
     socket.on('account_register', (firstName, lastName, phone, email, username, password) => {
@@ -141,7 +209,7 @@ io.on('connection', function(socket) {
             if(firstName == '' || lastName == '' || phone == '' || email == '' || username == '' || password == '') {
                 console.log("Registration: A field was empty. No user account created.");
             }else {
-                sql_connection.query('INSERT INTO users (id, firstName, lastName, phone, email, username, password) VALUES (?, ?, ?, ?, ?, ?, ?)', ['', firstName, lastName, phone, email, username, password], function(err, result) {
+                sql_connection.query('INSERT INTO users (firstName, lastName, phone, email, username, password) VALUES (?, ?, ?, ?, ?, ?)', [firstName, lastName, phone, email, username, password], function(err, result) {
                     if(err) throw err;
                     console.log("Inserted into db!");
                 })
@@ -156,6 +224,99 @@ io.on('connection', function(socket) {
         
     });
 
+    // Get account info in form of [firstName, lastName, phone]
+    socket.on('getAccountInfo', function(username, res) { 
+        // Retrieve user information from database
+        // sql_connection.query('SELECT firstName, lastName, phone FROM users WHERE username = ?', username, function(err, sqlResults) {
+        //     console.log("returned: " + sqlResults.toString());
+        //     if(err) {
+        //         console.log("err: " + err);
+        //         res(false);
+                
+        //         throw err;
+        //     }
+        //     res(sqlResults)
+        // })
+        getAccountInfo(username)
+        .then(function(result) {
+            // User exists, got data
+            console.log("result: " + result[0]);
+            res(result);
+            
+        })
+        .catch(function(err) {
+            // User already exists
+            console.log("ERR: " + err);
+            res(false);
+        })
+    })
+
+    // Check if an event with a given eventId exists already in the DB
+    socket.on('checkIfEventExists', function(eventId, fn) {
+        eventExists(eventId)
+        .then(function(result) {
+            // Event does not exist
+            console.log("The event: " + eventId + " does not exist."); // DEBUG
+            fn(true);
+        })
+        .catch(function(err) {
+
+            // Event already exists
+            fn(false);
+            
+            
+        })
+    })
+
+    // Create a new event
+    socket.on('createEvent', function(eventName, passcode, description, location, fn) { 
+        // Generate a Unique ID for this event
+        let eventId = generateId();
+
+        eventExists(eventId)
+        .then(function(result) {
+            // Event does not exist
+            console.log("The event: " + eventId + " does not exist."); // DEBUG
+
+             // Insert Event into database
+            sql_connection.query('INSERT INTO events (id, name, passcode, description, location) VALUES (?, ?, ?, ?, ?)', [eventId, eventName, passcode, description, location], function(err) {
+                if(err) {
+                    fn(false);
+                    throw err;
+                } 
+                console.log("Inserted into db!");
+
+                fn(eventId);
+            })
+
+        })
+        .catch(function(err) {
+            // Event with this ID already exists  
+            fn(false);
+        })
+
+    })
+    
+    // Join event
+        
+
 
 });
 
+
+/* ---ID Generation--- */
+
+// Generates and returns a random int from 0 to 9
+function getRandomInt() {
+    return Math.floor(Math.random() * Math.floor(10));
+}
+
+function generateId() {
+    let id = "";
+    for(let i = 0; i < 9; i++) {
+        id = id + getRandomInt();
+    }
+    console.log("Generated ID: " + id);
+    return id;
+}
+/* ---END ID Generation--- */
