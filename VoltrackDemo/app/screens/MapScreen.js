@@ -20,7 +20,6 @@ import MapView, {
 } from "react-native-maps";
 import haversine from "haversine";
 import styles from "../styles/MapStyles";
-import {Pressable} from "react-native-web";
 import {Actions} from "react-native-router-flux";
 
 // TODO: Add a callout to the marker
