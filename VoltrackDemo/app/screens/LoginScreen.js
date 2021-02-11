@@ -4,7 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Actions, Router, Scene } from "react-native-router-flux";
 import { TextInput } from 'react-native-gesture-handler';
 import socketIO from 'socket.io-client';
-import { useToast } from 'react-native-styled-toast'
+import Toast from "react-native-simple-toast";
 
 
 
