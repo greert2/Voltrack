@@ -1,189 +1,156 @@
-import React, { Component, useState, useEffect } from 'react';
-import { ImageBackground, StyleSheet, View, Button, Image, Text, TextView, TouchableOpacity} from 'react-native';
-import MapView, { Marker, MarkerAnimated, PROVIDER_GOOGLE } from 'react-native-maps';
-import * as Location from 'expo-location';
-import iconImg from '../assets/profilePic.png';
+// https://medium.com/quick-code/react-native-location-tracking-14ab2c9e2db8
 
-function MapScreen(props) {
-    // React Native Hooks (similar to state, but notice we are in a functional Component instead of a Class)
-    const [location, setLocation] = useState(null);
-    const [errorMsg, setErrorMsg] = useState(null);
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [markers, setMarkers] = useState([
-        {
-            key: 'test1',
-            coordinate: {
-                latitude: 48.73805,
-                longitude: -122.48051
-            }
-        },
-        {
-            key: 'test2',
-            coordinate: {
-                latitude: 48.73923,
-                longitude: -122.48514
-            }
-        }
-    ]);
+import React from "react";
+import {
+    StyleSheet,
+    View,
+    Text,
+    TextInput,
+    Image,
+    TouchableOpacity,
+    Platform,
+    PermissionsAndroid
+} from "react-native";
+import MapView, {
+    Marker,
+    Callout,
+    AnimatedRegion,
+    Polyline,
+    PROVIDER_GOOGLE
+} from "react-native-maps";
+import haversine from "haversine";
+import styles from "../styles/MapStyles";
+import {Actions} from "react-native-router-flux";
 
-    let id = 0;
+// TODO: Add a callout to the marker
+// A Callout is one of those things that pop
+// out from the marker and have some sort of text or info
+const LATITUDE_DELTA = 0.009;
+const LONGITUDE_DELTA = 0.009;
+const LATITUDE = 37.78825;
+const LONGITUDE = -122.4324;
 
-    useEffect(() => {
-        (async() => {
-            let { status } = await Location.requestPermissionsAsync();
-            if(status !== 'granted') {
-                setErrorMsg("Permission to access location was denied");
-                alert("Issue with location");
-                return;
-            }
+class MapScreen extends React.Component {
+    constructor(props) {
+        super(props);
 
-            let location = await Location.getCurrentPositionAsync({});
-            setLocation(location);
-            alert("location: " + location.coords.latitude + ", " + location.coords.longitude);
-        })();
-    }, []);
-
-    // onMapPress(e) {
-    //     this.setState({
-    //         markers: [
-    //         ...markers,
-    //         {
-    //             coordinate: e.nativeEvent.coordinate,
-    //             key: `foo${id++}`,
-    //         },
-    //         ],
-    //     });
-    // }
-
-    function test() {
-        
+        this.state = {
+            latitude: LATITUDE,
+            longitude: LONGITUDE,
+            routeCoordinates: [],
+            distanceTravelled: 0,
+            prevLatLng: {},
+            coordinate: new AnimatedRegion({
+                latitude: LATITUDE,
+                longitude: LONGITUDE,
+                latitudeDelta: 0,
+                longitudeDelta: 0
+            })
+        };
     }
-    
 
-    return (
-        <View style={{
-            width: '100%',
-            height: '100%'
-        }}
-        >
-            <MapView
-            style={{ flex: 1 }}
-            provider={PROVIDER_GOOGLE}
-            showsUserLocation={true}
-            followsUserLocation={true}
-            initialRegion={{
-            latitude: 48.769768,
-            longitude: -122.485886,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421}}
-            >
-            {markers.map(marker => (
-                <Marker
-                 title={marker.key}
-                 image={iconImg}
-                 key={marker.key}
-                 coordinate={marker.coordinate}
-                />
-            ))}
-            </MapView>
-            <View style={styles.backButton}>
-                <TouchableOpacity
-                style={styles.buttonTouchableOpacity}
-                    onPress={() => {
-                        setMarkers([
-                            {
-                                key: 'test1',
-                                coordinate: {
-                                    latitude: 48.73300,
-                                    longitude: -122.48051
-                                }
-                             },
-                             {
-                                key: 'test2',
-                                coordinate: {
-                                    latitude: 48.74223,
-                                    longitude: -122.48514
-                                }
-                            }
-                            ]);
-                    }}
+    componentDidMount() {
+        const { coordinate } = this.state;
+
+        this.watchID = navigator.geolocation.watchPosition(
+            position => {
+                const { routeCoordinates, distanceTravelled } = this.state;
+                const { latitude, longitude } = position.coords;
+
+                const newCoordinate = {
+                    latitude,
+                    longitude
+                };
+
+                if (Platform.OS === "android") {
+                    if (this.marker) {
+                        this.marker._component.animateMarkerToCoordinate(
+                            newCoordinate,
+                            500
+                        );
+                    }
+                } else {
+                    coordinate.timing(newCoordinate).start();
+                }
+
+                this.setState({
+                    latitude,
+                    longitude,
+                    routeCoordinates: routeCoordinates.concat([newCoordinate]),
+                    distanceTravelled:
+                        distanceTravelled + this.calcDistance(newCoordinate),
+                    prevLatLng: newCoordinate
+                });
+            },
+            error => console.log(error),
+            {
+                enableHighAccuracy: true,
+                timeout: 20000,
+                maximumAge: 1000,
+                distanceFilter: 10
+            }
+        );
+    }
+
+    componentWillUnmount() {
+        navigator.geolocation.clearWatch(this.watchID);
+    }
+
+    getMapRegion = () => ({
+        latitude: this.state.latitude,
+        longitude: this.state.longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA
+    });
+
+    calcDistance = newLatLng => {
+        const { prevLatLng } = this.state;
+        return haversine(prevLatLng, newLatLng) || 0;
+    };
+
+    render() {
+        return (
+            <View style={styles.container}>
+                <MapView
+                    style={styles.map}
+                    provider={PROVIDER_GOOGLE}
+                    showUserLocation
+                    followUserLocation
+                    loadingEnabled
+                    region={this.getMapRegion()}
                 >
-                <Text style={styles.btnTextWhite}>Update</Text>
-                </TouchableOpacity>
+                    <Polyline coordinates={this.state.routeCoordinates} strokeWidth={5} />
+                    <Marker.Animated
+                        ref={marker => {
+                            this.marker = marker;
+                        }}
+                        coordinate={this.state.coordinate}
+                    >
+                        <Image source={require('../assets/skull.png')}
+                               style={styles.tinyLogo}
+                        />
+                    </Marker.Animated>
+                </MapView>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity style={[styles.bubble, styles.button]}>
+                        <Text style={styles.bottomBarContent}>
+                            {parseFloat(this.state.distanceTravelled).toFixed(2)} km
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.backButton}>
+                    <TouchableOpacity
+                        style={styles.buttonTouchableOpacity}
+                        onPress={() => {
+                            Actions.pop()
+                        }}
+                    >
+                        <Text style={styles.btnTextWhite}>Back</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-        </View>
-
-
-    );
-}
-
-const styles = StyleSheet.create({
-    background: {
-        flex: 1,
-        justifyContent: "flex-end",
-        alignItems: "center",
-    },
-    inputBox: {
-        width: "90%",
-        height: 40,
-        backgroundColor: "rgba(50,50,50,0.5)",
-        marginTop: 20,
-        borderRadius: 5,
-        textAlign: "center",
-    },
-    loginButton: {
-        width: '100%',
-        height: 70,
-        backgroundColor: "rgba(0,0,0,0.3)",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    backButton: {
-        position: 'absolute',
-        width: "100%",
-        height: 80,
-        backgroundColor: "rgba(0,0,0,0.5)",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    buttonTouchableOpacity: {
-        width: "100%",
-        height: "100%",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    btnTextWhite: {
-        color: "#ffffff",
-        fontSize: 24,
-    },
-    btnTextBlack: {
-        color: "gray",
-        fontSize: 24,
-    },
-    logo: {
-        marginTop: 40,
-        fontSize: 24,
-        fontWeight: "bold",
-        color: "black",
-    },
-    container: {
-        position: 'absolute',
-        top: 70,
-        alignItems: "center",
-        width: "100%"
-    },
-    mainPanel: {
-        marginTop: 70,
-        alignItems: "center",
-        justifyContent: "center",
-        width: "100%"
-    },
-    image: {
-        flex: 1,
-        height: 100,
-        resizeMode: "contain",
+        );
     }
-});
+}
 
 export default MapScreen;

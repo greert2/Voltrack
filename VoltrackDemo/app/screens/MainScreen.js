@@ -51,6 +51,18 @@ const MainScreen = () => {
                 <Text style={styles.btnTextWhite}>Register</Text>
                 </TouchableOpacity>
             </View>
+
+            {/* Map Button */}
+            <View style={styles.mapButton}>
+                <TouchableOpacity
+                    style={styles.buttonTouchableOpacity}
+                    onPress={() => {
+                        Actions.MapScreen()
+                    }}
+                >
+                    <Text style={styles.btnTextWhite}>Map</Text>
+                </TouchableOpacity>
+            </View>
         </ImageBackground>
         
     );
@@ -79,6 +91,14 @@ const styles = StyleSheet.create({
         height: 80,
         // backgroundColor: "#403540", //#403540
         backgroundColor: "rgba(0,0,0,0.5)",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    mapButton: {
+        width: "100%",
+        height: 80,
+        // backgroundColor: "#403540", //#403540
+        backgroundColor: "rgba(0,0,0,0.7)",
         justifyContent: "center",
         alignItems: "center",
     },
