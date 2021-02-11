@@ -71,7 +71,7 @@ class CreateEventScreen extends Component {
                     <TouchableOpacity
                     style={styles.buttonTouchableOpacity}
                         onPress={() => {
-                            // alert("Event Created!")
+                            showToast()
                             connection.createEvent(this.state.eventName, this.state.passcode, this.state.description, this.state.location);
                             Actions.pop();
                         }}
@@ -94,6 +94,14 @@ class CreateEventScreen extends Component {
         )
     }
 }
+
+const showToast = () => (
+    Toast.showWithGravity(
+        "Event Created!", 
+        Toast.SHORT, 
+        Toast.TOP,
+    )
+)
 
 const styles = StyleSheet.create({
     background: {
