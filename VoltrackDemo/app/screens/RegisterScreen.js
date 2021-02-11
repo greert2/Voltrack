@@ -1,8 +1,9 @@
 import React, { useState, Component } from 'react';
-import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacity} from 'react-native';
+import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacity, ToastAndroid} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Actions, Router, Scene } from "react-native-router-flux";
 import { TextInput } from 'react-native-gesture-handler';
+import Toast from 'react-native-simple-toast';
 
 // TODO: this login system is not secure despite hashing passwords before sending. We need to add a layer of device authentication or use something else like key pairs
 
@@ -101,7 +102,7 @@ class RegisterScreen extends Component {
                     <TouchableOpacity
                     style={styles.buttonTouchableOpacity}
                         onPress={() => {
-                            alert("register !")
+                            showToast();
                             // Hash password before sending
                             var salt = bcrypt.genSaltSync(10);
                             var hashedPass = bcrypt.hashSync(this.state.password, salt);
@@ -127,6 +128,14 @@ class RegisterScreen extends Component {
         );
     }
 }
+
+const showToast = () => (
+    Toast.showWithGravity(
+        "Register!", 
+        Toast.SHORT, 
+        Toast.TOP,
+    )
+)
 
 const styles = StyleSheet.create({
     background: {

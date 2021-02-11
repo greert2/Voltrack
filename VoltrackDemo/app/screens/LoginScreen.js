@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Actions, Router, Scene } from "react-native-router-flux";
 import { TextInput } from 'react-native-gesture-handler';
 import socketIO from 'socket.io-client';
+import { useToast } from 'react-native-styled-toast'
 
 
 
@@ -72,10 +73,10 @@ class LoginScreen extends Component {
                         socket.on('authorized', (res) => {
                             if(res === true) {
                                 socket.off('authorized'); // remove this listener now, we're done
-                                Actions.HomeScreen({username: this.state.username});
+                                Actions.HomeScreen({username: this.state.username, socket: connection});
                             }else {
                                 socket.off('authorized'); // remove this listener now, we're done
-                                alert("This username/password combination is not correct.");
+                                showToast()
                             }
                                     
                         });
@@ -101,6 +102,14 @@ class LoginScreen extends Component {
     }
    
 }
+
+const showToast = () => (
+    Toast.showWithGravity(
+        "This username/password combination is not correct!", 
+        Toast.SHORT, 
+        Toast.TOP,
+    )
+)
 
 const styles = StyleSheet.create({
     background: {

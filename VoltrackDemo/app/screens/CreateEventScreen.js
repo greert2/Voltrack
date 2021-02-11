@@ -1,81 +1,107 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacity} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Actions, Router, Scene } from "react-native-router-flux";
 import { TextInput } from 'react-native-gesture-handler';
 
 
-function CreateEventScreen(props) {
-    return (
-        <ImageBackground 
-            style={styles.background} 
-            source={require('../assets/splash.png')}
-        >
-            <LinearGradient
-                // Background Linear Gradient
-                // colors={['#f94244', '#ff9f3e']}
-                colors={['rgba(255,78,80,1)', 'rgba(249,212,35,1)']}
-                start={{ x: 0, y: 0.75 }}
-                end={{ x: 0, y: 1 }}
-                style={{
-                position: 'absolute',
-                left: 0,
-                right: 0,
-                top: 0,
-                height: '100%',
-                }}
-            />
-            <View style={styles.container}>
-                <Image style={styles.image} source={require('../assets/voltrackLogo.png')}/>
-                <Text style={styles.logo}>Create Event</Text>
-                <View style={styles.mainPanel}>
-                    {/* Event Name Textbox */}
-                    <TextInput
-                        style={styles.inputBox}
-                        placeholder="Event ID"
-                        placeholderTextColor={'black'}
-                    />
-                    {/* Password Textbox */}
-                    <TextInput
-                        style={styles.inputBox}
-                        placeholder="Passcode"
-                        placeholderTextColor={'black'}
-                        secureTextEntry={true}
-                    />
-                    <TextInput
-                        style={styles.inputBox_eventDescription}
-                        placeholder="Event Description "
-                        placeholderTextColor={'black'}
-                    />
-                </View>
-            </View>
-             {/* Create Event Button */}
-             <View style={styles.loginButton}>
-                <TouchableOpacity
-                style={styles.buttonTouchableOpacity}
-                    onPress={() => {
-                        alert("Event Created!")
-                        Actions.HomeScreen()
-                    }}
-                >
-                    <Text style={styles.btnTextWhite}>Create Event</Text>
-                </TouchableOpacity>
-            </View>
-            {/* Back Button */}
-            <View style={styles.backButton}>
-                <TouchableOpacity
-                style={styles.buttonTouchableOpacity}
-                    onPress={() => {
-                        Actions.pop()
-                    }}
-                >
-                <Text style={styles.btnTextWhite}>Back</Text>
-                </TouchableOpacity>
-            </View>
-        </ImageBackground>
+class CreateEventScreen extends Component {
+    
+    state = {
+        eventName: "",
+        passcode: "",
+        description: "",
+        location: "default location"
+    }
+    
+    render () {
+
+        // Connect to server here
+        var connection = require('../scripts/serverConnection.js');
+        connection.connect();
         
-    );
+        return (
+            <ImageBackground 
+                style={styles.background} 
+                source={require('../assets/splash.png')}
+            >
+                <LinearGradient
+                    // Background Linear Gradient
+                    // colors={['#f94244', '#ff9f3e']}
+                    colors={['rgba(255,78,80,1)', 'rgba(249,212,35,1)']}
+                    start={{ x: 0, y: 0.75 }}
+                    end={{ x: 0, y: 1 }}
+                    style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    height: '100%',
+                    }}
+                />
+                <View style={styles.container}>
+                    <Image style={styles.image} source={require('../assets/voltrackLogo.png')}/>
+                    <Text style={styles.logo}>Create Event</Text>
+                    <View style={styles.mainPanel}>
+                        {/* Event Name Textbox */}
+                        <TextInput
+                            style={styles.inputBox}
+                            placeholder="Event Name"
+                            placeholderTextColor={'black'}
+                            onChangeText={(eventName) => this.setState({eventName})}
+                        />
+                        {/* Password Textbox */}
+                        <TextInput
+                            style={styles.inputBox}
+                            placeholder="Passcode"
+                            placeholderTextColor={'black'}
+                            secureTextEntry={true}
+                            onChangeText={(passcode) => this.setState({passcode})}
+                        />
+                        <TextInput
+                            style={styles.inputBox_eventDescription}
+                            placeholder="Event Description "
+                            placeholderTextColor={'black'}
+                            onChangeText={(description) => this.setState({description})}
+                        />
+                    </View>
+                </View>
+                {/* Create Event Button */}
+                <View style={styles.loginButton}>
+                    <TouchableOpacity
+                    style={styles.buttonTouchableOpacity}
+                        onPress={() => {
+                            showToast()
+                            connection.createEvent(this.state.eventName, this.state.passcode, this.state.description, this.state.location);
+                            Actions.pop();
+                        }}
+                    >
+                        <Text style={styles.btnTextWhite}>Create Event</Text>
+                    </TouchableOpacity>
+                </View>
+                {/* Back Button */}
+                <View style={styles.backButton}>
+                    <TouchableOpacity
+                    style={styles.buttonTouchableOpacity}
+                        onPress={() => {
+                            Actions.pop()
+                        }}
+                    >
+                    <Text style={styles.btnTextWhite}>Back</Text>
+                    </TouchableOpacity>
+                </View>
+            </ImageBackground>
+        )
+    }
 }
+
+const showToast = () => (
+    Toast.showWithGravity(
+        "Event Created!", 
+        Toast.SHORT, 
+        Toast.TOP,
+    )
+)
 
 const styles = StyleSheet.create({
     background: {
