@@ -85,6 +85,17 @@ class HomeScreen extends Component {
                         <Text style={styles.item}>{item.name}</Text>
                     )}
                     />
+                    {/* Temporary Map Button */}
+                    <View style={styles.JoinEventButton}>
+                        <TouchableOpacity
+                        style={styles.buttonTouchableOpacity}
+                            onPress={() => {
+                                Actions.MapScreen({firstName: this.state.firstName, lastName: this.state.lastName});
+                            }}
+                        >
+                            <Text style={styles.btnTextWhite}>Map</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <View style={styles.buttonContainer}>
                 {/* Join Event Button */}
