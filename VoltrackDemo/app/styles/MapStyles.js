@@ -54,6 +54,23 @@ const styles = StyleSheet.create({
     tinyLogo: {
         width: 50,
         height: 50,
+    },
+    backButton: {
+        width: "100%",
+        height: 80,
+        backgroundColor: "rgba(0,0,0,0.5)",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    buttonTouchableOpacity: {
+        width: "100%",
+        height: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    btnTextWhite: {
+        color: "#ffffff",
+        fontSize: 24,
     }
 });
 

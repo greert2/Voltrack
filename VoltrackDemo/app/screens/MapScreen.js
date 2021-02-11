@@ -20,8 +20,12 @@ import MapView, {
 } from "react-native-maps";
 import haversine from "haversine";
 import styles from "../styles/MapStyles";
+import {Pressable} from "react-native-web";
+import {Actions} from "react-native-router-flux";
 
-
+// TODO: Add a callout to the marker
+// A Callout is one of those things that pop
+// out from the marker and have some sort of text or info
 const LATITUDE_DELTA = 0.009;
 const LONGITUDE_DELTA = 0.009;
 const LATITUDE = 37.78825;
@@ -128,18 +132,21 @@ class MapScreen extends React.Component {
                         />
                     </Marker.Animated>
                 </MapView>
-                <Callout>
-                    <View style = {styles.calloutView}>
-                        <TextInput style = {styles.calloutSearch}
-                                   placeholder={"Search"}
-                        />
-                    </View>
-                </Callout>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity style={[styles.bubble, styles.button]}>
                         <Text style={styles.bottomBarContent}>
                             {parseFloat(this.state.distanceTravelled).toFixed(2)} km
                         </Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.backButton}>
+                    <TouchableOpacity
+                        style={styles.buttonTouchableOpacity}
+                        onPress={() => {
+                            Actions.pop()
+                        }}
+                    >
+                        <Text style={styles.btnTextWhite}>Back</Text>
                     </TouchableOpacity>
                 </View>
             </View>
