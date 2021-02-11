@@ -19,6 +19,7 @@ import MapView, {
     PROVIDER_GOOGLE
 } from "react-native-maps";
 import haversine from "haversine";
+import styles from "../styles/MapStyles";
 
 
 const LATITUDE_DELTA = 0.009;
@@ -145,61 +146,5 @@ class MapScreen extends React.Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        ...StyleSheet.absoluteFillObject,
-        justifyContent: "flex-end",
-        alignItems: "center"
-    },
-    map: {
-        ...StyleSheet.absoluteFillObject
-    },
-    bubble: {
-        flex: 1,
-        backgroundColor: "rgba(255,255,255,0.7)",
-        paddingHorizontal: 18,
-        paddingVertical: 12,
-        borderRadius: 20
-    },
-    latlng: {
-        width: 200,
-        alignItems: "stretch"
-    },
-    button: {
-        width: 80,
-        paddingHorizontal: 12,
-        alignItems: "center",
-        marginHorizontal: 10
-    },
-    buttonContainer: {
-        flexDirection: "row",
-        marginVertical: 20,
-        backgroundColor: "transparent"
-    },
-    // TODO: Fix positioning of search button
-    calloutView: {
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        backgroundColor: "rgba(255, 255, 255, 0.9)",
-        borderRadius: 10,
-        width: "40%",
-        marginLeft: "30%",
-        marginRight: "30%",
-        marginTop: "15%"
-    },
-    calloutSearch: {
-        borderColor: "transparent",
-        marginLeft: 10,
-        width: "90%",
-        marginRight: 10,
-        height: 40,
-        borderWidth: 0.0
-    },
-    tinyLogo: {
-        width: 50,
-        height: 50,
-    }
-});
 
 export default MapScreen;
