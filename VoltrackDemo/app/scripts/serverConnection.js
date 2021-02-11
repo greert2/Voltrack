@@ -1,6 +1,6 @@
 import socketIO from 'socket.io-client';
 
-const socket = socketIO('http://143.110.157.61:3000', {  // NOTE: this is currently set to the server's static IP
+const socket = socketIO('http://voltrackapp.com:3000', {  // NOTE: this is currently set to the server's static IP
         transports: ['websocket'], jsonp: false
     });
 

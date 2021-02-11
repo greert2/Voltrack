@@ -9,6 +9,7 @@ import homeScreen from './app/screens/HomeScreen';
 import joinEventScreen from './app/screens/JoinEventScreen';
 import eventInfoScreen from './app/screens/EventInfoScreen';
 import userSettingsScreen from './app/screens/UserSettings';
+import setLocationScreen from './app/screens/SetLocationScreen';
 import socketIO from 'socket.io-client';
 
 
@@ -39,6 +40,7 @@ App = () => (
       <Scene key="JoinEventScreen" component={joinEventScreen} hideNavBar />
       <Scene key="EventInfoScreen" component={eventInfoScreen} hideNavBar />
       <Scene key="UserSettingsScreen" component={userSettingsScreen} hideNavBar />
+      <Scene key="SetLocationScreen" component={setLocationScreen} hideNavBar />
     </Scene>
   </Router>
 );
