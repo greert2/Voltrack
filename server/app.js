@@ -101,6 +101,37 @@ let eventExists = function(eventId) {
 }
 
 
+// canJoinEvent()
+// Given an eventId and a passcode, determines if a user can join the event (by seeing if it exists and comparing the passcode)
+// If successful, returns an object containing the eventName, description, and default location string.
+let canJoinEvent = function(eventId, passcode) {
+    return new Promise(function(resolve, reject) {
+        sql_connection.query('SELECT name, description, location FROM events WHERE id = ? AND passcode = ?', eventId, passcode, function(err, results) {
+            if(err) {
+                console.log("Error selecting eventId: " + eventId);
+            }else {
+                // console.log("size of res: " + results.length);
+                if(results.length > 0) {
+                    resolve(results[0]) // user can join this event.. send back event info
+                }else {
+                    reject(new Error("EventId or Passcode incorrect"));
+                }
+            }
+        });
+    })
+}
+
+
+// doJoinEvent()
+// Given a userId and a eventId, makes a user join an event by putting an entry in the 'joined_events' table
+let doJoinEvent = function(userId, eventId) {
+    const defaultLocation = 'default';
+    sql_connection.query('INSERT INTO joined_events (userid, eventid, location) VALUES (?, ?, ?)', [userid, eventid, defaultLocation], function(err, result) {
+        if(err) throw err;
+        console.log("Inserted into db!");
+    })
+}
+
 
 // Promises a hashed password (given it is used on a previously proven username)
 let getHashedPassFromDB = function(username) {
@@ -119,32 +150,6 @@ let getHashedPassFromDB = function(username) {
         });
     })
 }
-
-
-// // Generates a unique eventId
-// let generateUniqueEventId = function() {
-//     return new Promise(function(resolve, reject) {
-//         let eventId = generateId();
-//         let isIdUnique = false;
-
-//         eventExists(eventId)
-//         .then(function(result) {
-//             // Event does not exist
-//             console.log("The event with id: " + eventId + " does not exist."); // DEBUG
-//             isIdUnique = true;
-//             resolve(eventId);
-//             // fn(true);
-//         })
-//         .catch(function(err) {
-
-//             // Event already exists, generate new
-//             console.log("event exists already!");
-//             return generateUniqueId();
-//             // fn(false);
-            
-//         })
-//     })
-// }
 
 
 
@@ -227,16 +232,6 @@ io.on('connection', function(socket) {
     // Get account info in form of [firstName, lastName, phone]
     socket.on('getAccountInfo', function(username, res) { 
         // Retrieve user information from database
-        // sql_connection.query('SELECT firstName, lastName, phone FROM users WHERE username = ?', username, function(err, sqlResults) {
-        //     console.log("returned: " + sqlResults.toString());
-        //     if(err) {
-        //         console.log("err: " + err);
-        //         res(false);
-                
-        //         throw err;
-        //     }
-        //     res(sqlResults)
-        // })
         getAccountInfo(username)
         .then(function(result) {
             // User exists, got data
@@ -298,10 +293,26 @@ io.on('connection', function(socket) {
     })
     
     // Join event
-        
+    socket.on('canJoinEvent', function(eventId, passcode, fn) {
+        canJoinEvent(eventId, passcode)
+        .then(function(result) {
+            // event and passcode were correct
+            fn(result);
+        })
+        .catch(function(err) {
+            // incorrect eventId or passcode
+            fn(false);
+        })
+    })
+
+    socket.on('doJoinEvent', function(userId, eventId) {
+        doJoinEvent(userId, eventId);
+    })
 
 
 });
+
+
 
 
 /* ---ID Generation--- */
