@@ -3,7 +3,7 @@ import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacit
 import { LinearGradient } from 'expo-linear-gradient';
 import { Actions, Router, Scene } from "react-native-router-flux";
 import { TextInput } from 'react-native-gesture-handler';
-import Toast from 'react-native-simple-toast';
+// import Toast from 'react-native-simple-toast';
 
 
 class CreateEventScreen extends Component {
@@ -81,7 +81,7 @@ class CreateEventScreen extends Component {
                                 Actions.SetLocationScreen({eventName: this.state.eventName, passcode: this.state.passcode, description: this.state.description});
                                 // Actions.pop();
                             }else {
-                                showToast()
+                                // showToast()
                             }
 
                             
@@ -106,13 +106,13 @@ class CreateEventScreen extends Component {
     }
 }
 
-const showToast = () => (
-    Toast.showWithGravity(
-        "Event Created!", 
-        Toast.SHORT, 
-        Toast.TOP,
-    )
-)
+// const showToast = () => (
+//     Toast.showWithGravity(
+//         "Event Created!", 
+//         Toast.SHORT, 
+//         Toast.TOP,
+//     )
+// )
 
 const styles = StyleSheet.create({
     background: {

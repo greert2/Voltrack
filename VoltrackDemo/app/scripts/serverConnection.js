@@ -13,7 +13,7 @@ export function connect() {
     addBasicListeners();
 }
 
-export function getSocket() { return socket; } 
+export function getSocket() { return socket; }
 
 export function authUser(username, password, callback) {
     if(socket.connected) {
@@ -63,6 +63,33 @@ export let getAccountInfo = function(username, userInfoObj) {
         }
     })
 }
+
+
+export let canJoinEvent = function(eventId, passcode) {
+    return new Promise(function(resolve, reject) {
+        if(socket.connected) {
+            socket.emit('canJoinEvent', eventId, passcode, function(res) {
+                if(res == false) {
+                    // alert("Error retrieving account information.");  // DEBUG
+                    reject(new Error("EventId or Passcode incorrect"))
+                }else {
+                    console.log("output: " + res[0].firstName);
+                    let arr = [res[0].firstName, res[0].lastName, res[0].phone];
+                    resolve(arr);
+                }
+            })
+        }
+    })
+}
+
+
+export let doJoinEvent = function(userId, eventId) {
+    if(socket.connected) {
+        socket.emit('doJoinEvent', userId, eventId)
+    }
+}
+
+
 
 
 // This may be entirely unneeded depending on our structure.
