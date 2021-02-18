@@ -456,7 +456,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         width: '100%',
-        bottom: 823,
+        bottom: 875,
         
       },
 });
