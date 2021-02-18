@@ -129,6 +129,16 @@ class MapScreen extends React.Component {
                         <Image source={require('../assets/skull.png')}
                                style={styles.tinyLogo}
                         />
+                        <Callout tooltip>
+                            <View>
+                                <View style={styles.bubbleMarker}>
+                                    <Text style={styles.name}>Aran</Text>
+                                    <Text>On the Move</Text>
+                                </View>
+                                <View style={styles.arrowBorder} />
+                                <View style={styles.arrow} />
+                            </View>
+                        </Callout>
                     </Marker.Animated>
                 </MapView>
                 <View style={styles.buttonContainer}>
