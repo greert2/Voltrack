@@ -101,17 +101,6 @@ class EventInfoScreen extends Component {
                                 </MapView>
                     </View>
                 </View>
-                {/* Back Button */}
-                <View style={styles.backButton}>
-                    <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                        onPress={() => {
-                            Actions.pop()
-                        }}
-                    >
-                    <Text style={styles.btnTextWhite}>X</Text>
-                    </TouchableOpacity>
-                </View>
                 <View style={styles.buttonContainer}>
                 {/* Join Event Button */}
                 <View style={styles.JoinEventButton}>
@@ -401,7 +390,7 @@ const styles = StyleSheet.create({
     },
     container: {
         position: 'absolute',
-        top: 70,
+        top: 60,
         alignItems: "center",
         width: "100%",
 
@@ -457,7 +446,7 @@ const styles = StyleSheet.create({
     AcceptEventButton: {
         width: '38%',
         height: 60,
-        bottom: 137,
+        bottom: 143,
         backgroundColor: "rgba(0,0,0,0.3)",
         justifyContent: "center",
         fontWeight: "bold",
