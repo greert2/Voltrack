@@ -5,7 +5,7 @@ import { Actions, Router, Scene } from "react-native-router-flux";
 import { TextInput } from 'react-native-gesture-handler';
 
 
-class HomeScreen extends Component {
+class YourEventsScreen extends Component {
 
 
     constructor(props) {
@@ -21,39 +21,24 @@ class HomeScreen extends Component {
 
     componentDidMount() {
         var connection = this.props.socket; // get our connection
-        
-        var that = this; // save the context so we can access it in a function
-
-        connection.getAccountInfo({username: this.props.username})
-        .then(function(result) {
-            // Got user account info
-            let resultArr = result;
-
-            // Update the state
-            that.setState({
-                 firstName: resultArr[0],
-                 lastName: resultArr[1],
-                 phone: resultArr[2]
-            })
-            
-        })
-        .catch(function(err) {
-            console.log(err);
-        })
     }
-
-    
 
     render() {
 
-
-        let people = [
-            { name: 'Hao', key: '1'},
-            { name: 'Tyler', key: '2'},
-            { name: 'Carlos', key: '3'},
-            { name: 'Laura', key: '4'},
+        //make connection here to what is in the database
+        let currentEvents = [
+            { name: 'Fun run', key: '1'},
+            { name: 'Food bank', key: '2'},
+            { name: 'dog sitting', key: '3'},
+            { name: 'blankets for babies', key: '4'},
         ]
-        
+
+        let pastEvents = [
+            { name: 'baking for elderly', key: '1'},
+            { name: 'olympics', key: '2'},
+            { name: 'Transporting homeless', key: '3'},
+            { name: 'book reading for prisoners', key: '4'},
+        ]
         
         return (
 
@@ -75,12 +60,30 @@ class HomeScreen extends Component {
                     }}
                 />
                 <View style={styles.container}>
-                    <Image style={styles.image} source={require('../assets/voltrackLogo.png')}/>
+                    <Image style={styles.image1} source={require('../assets/voltrackLogo.png')}/>
                     <View style={styles.textLeft}>
-                        <Text style={styles.text}>Welcome {this.state.firstName}!</Text>
+                        <Text style={styles.text}>Current Events</Text>
                     </View>
-                    <FlatList 
-                        data={people}
+                    <FlatList style={styles.list}
+                        data={currentEvents}
+                        renderItem={({ item }) => (
+                        <TouchableOpacity
+                        onPress={() => {
+                            Actions.EventPageScreen()
+                            /*go to that events communication page*/
+                            /*different page if it is the person that made the event
+                            so check for the start on the side*/
+                        }}
+                        >
+                        <Text style={styles.item}>{item.name}</Text>
+                        </TouchableOpacity>
+                    )}
+                    />
+                     <View style={styles.textLeft}>
+                        <Text style={styles.text}>Past Events</Text>
+                    </View>
+                    <FlatList style={styles.list}
+                        data={pastEvents}
                         renderItem={({ item }) => (
                         <Text style={styles.item}>{item.name}</Text>
                     )}
@@ -109,23 +112,24 @@ class HomeScreen extends Component {
                         <Text style={styles.btnTextWhite}>Map</Text>
                     </TouchableOpacity>
                  </View>
+
                 {/* Home Button */}
                 <View style={styles.JoinEventButton}>
                     <TouchableOpacity
                     style={styles.buttonTouchableOpacity}
                         onPress={() => {
-                            
+                            Actions.pop()
                         }}
                     >
                         <Text style={styles.btnTextWhite}>Home</Text>
                     </TouchableOpacity>
                 </View>
+
                 {/* Your Events Button */}
                 <View style={styles.JoinEventButton}>
                     <TouchableOpacity
                         style={styles.buttonTouchableOpacity}
                             onPress={() => {
-                                Actions.YourEventsScreen();
                             }}
                         >
                         <Text style={styles.btnTextWhite}>Your Events</Text>
@@ -144,18 +148,6 @@ class HomeScreen extends Component {
                     </TouchableOpacity>
                 </View>
                 </View> 
-                {/* User Settings Button */}
-                <View style={styles.profileButton}>
-                    <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                        onPress={() => {
-                            Actions.UserSettingsScreen({socket: this.props.connection, username: this.props.username, firstName: this.state.firstName, 
-                                lastName: this.state.lastName, phone: this.state.phone});
-                        }}
-                    >
-                    <Image style={styles.image} source={require('../assets/profilePic.png')}/>
-                    </TouchableOpacity>
-                </View>
 
             </ImageBackground>
             
@@ -177,13 +169,6 @@ const styles = StyleSheet.create({
         marginTop: 20,
         borderRadius: 5,
         textAlign: "center",
-    },
-    CreateEventButton: {
-        width: '50%',
-        height: 70,
-        backgroundColor: "rgba(0,0,0,0.3)",
-        justifyContent: "center",
-        alignItems: "center",
     },
     JoinEventButton: {
         width: '48%',
@@ -217,7 +202,7 @@ const styles = StyleSheet.create({
     },
     container: {
         position: 'absolute',
-        top: 70,
+        top: 22,
         alignItems: "center",
         width: "100%",
         // flex: 1,
@@ -247,22 +232,37 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         width: "100%"
     },
-    image: {
+    image1: {
+        flex: 1,
+        left: 164,
+        height: 100,
+        resizeMode: "contain",
+    },
+    image:{
         flex: 1,
         height: 100,
         resizeMode: "contain",
     },
     item: {
-        color: "white",
+        color: "black",
         flex: 1,
+        fontWeight: "bold",
         marginHorizontal: 10,
-        marginTop: 24,
         padding: 30,
+        borderColor: "grey",
+        borderWidth: 1,
         backgroundColor: 'pink',
+        borderBottomWidth: 1,
         fontSize: 24,
     },
     textLeft: {
-        textAlign: "left"
+        textAlign: "left",
+    },
+    text: {
+        fontSize: 33,
+        color: "black",
+        marginTop: 10,
+        fontWeight: "bold",
     },
     list: {
         width: "100%",
@@ -270,4 +270,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default HomeScreen;
+export default YourEventsScreen;
