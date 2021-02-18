@@ -85,17 +85,6 @@ class HomeScreen extends Component {
                         <Text style={styles.item}>{item.name}</Text>
                     )}
                     />
-                    {/* Temporary Map Button */}
-                    <View style={styles.JoinEventButton}>
-                        <TouchableOpacity
-                        style={styles.buttonTouchableOpacity}
-                            onPress={() => {
-                                Actions.MapScreen({firstName: this.state.firstName, lastName: this.state.lastName});
-                            }}
-                        >
-                            <Text style={styles.btnTextWhite}>Map</Text>
-                        </TouchableOpacity>
-                    </View>
                 </View>
                 <View style={styles.buttonContainer}>
                 {/* Join Event Button */}
@@ -109,8 +98,42 @@ class HomeScreen extends Component {
                         <Text style={styles.btnTextWhite}>Join Event</Text>
                     </TouchableOpacity>
                 </View>
+                 {/* Map Button */}
+                <View style={styles.JoinEventButton}>
+                    <TouchableOpacity
+                        style={styles.buttonTouchableOpacity}
+                            onPress={() => {
+                                Actions.MapScreen({firstName: this.state.firstName, lastName: this.state.lastName});
+                            }}
+                        >
+                        <Text style={styles.btnTextWhite}>Map</Text>
+                    </TouchableOpacity>
+                 </View>
+                {/* Home Button */}
+                <View style={styles.JoinEventButton}>
+                    <TouchableOpacity
+                    style={styles.buttonTouchableOpacity}
+                        onPress={() => {
+                            
+                        }}
+                    >
+                        <Text style={styles.btnTextWhite}>Home</Text>
+                    </TouchableOpacity>
+                </View>
+                {/* Your Events Button */}
+                <View style={styles.JoinEventButton}>
+                    <TouchableOpacity
+                        style={styles.buttonTouchableOpacity}
+                            onPress={() => {
+                                Actions.YourEventsScreen();
+                            }}
+                        >
+                        <Text style={styles.btnTextWhite}>Your Events</Text>
+                    </TouchableOpacity>
+                 </View>
+
                 {/* Create Event Button */}
-                <View style={styles.CreateEventButton}>
+                <View style={styles.JoinEventButton}>
                     <TouchableOpacity
                     style={styles.buttonTouchableOpacity}
                         onPress={() => {
@@ -163,10 +186,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     JoinEventButton: {
-        width: '50%',
-        height: 70,
+        width: '48%',
+        height: 120,
         backgroundColor: "rgba(0,0,0,0.3)",
         justifyContent: "center",
+        fontWeight: "bold",
         alignItems: "center",
     },
     profileButton: {
@@ -209,8 +233,11 @@ const styles = StyleSheet.create({
     buttonContainer: {
         position: 'absolute',
         alignItems: "center",
-        width: "100%",
+        bottom: 2,
+        left: 0,
         flex: 1,
+        width: 179,
+        height:110,
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
@@ -236,6 +263,10 @@ const styles = StyleSheet.create({
     },
     textLeft: {
         textAlign: "left"
+    },
+    list: {
+        width: "100%",
+        height: 280,
     }
 });
 
