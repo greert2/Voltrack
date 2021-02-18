@@ -1,95 +1,196 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacity} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Actions, Router, Scene } from "react-native-router-flux";
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import MapView, {Marker} from 'react-native-maps';
 import {SafeAreaView} from 'react-native';
+import FlashMessage from "react-native-flash-message";
+import { showMessage, hideMessage } from "react-native-flash-message";
+import { StackActions } from '@react-navigation/native';
 
 
-function RegisterScreen(props) {
-    return (
-        <ImageBackground
-            style={styles.background}
-            source={require('../assets/splash.png')}
-        >
-            <LinearGradient
-                colors={['rgba(255,78,80,1)', 'rgba(249,212,35,1)']}
-                start={{ x: 0, y: 0.75 }}
-                end={{ x: 0, y: 1 }}
-                style={{
-                position: 'absolute',
-                left: 0,
-                right: 0,
-                top: 0,
-                height: '100%',
-                }}
-            />
-            <View style={styles.container}>
-                <Text style={styles.logo}>Event Information</Text>
-                <View style={styles.mainPanel}>
-                    
-                    <Text style={styles.title3}> 
-                    Event Name
-                    </Text>
+class EventInfoScreen extends Component {
 
-                    <Text style={styles.title}> 
-                    Description
-                    </Text>
-                    {/* Username Textbox */}
-                        <Text style={styles.DesBox}>
-                        This is the event description,
-                        lots of Information
+    constructor(props) {
+        super(props);
+        this.state = { 
+            eventid: '',
+            eventName: '',
+            eventDescription: '',
+            eventLocation: '',
+        }
+        
+    }
 
-                        </Text>
-                    <Text style={styles.title2}> 
-                    Members
-                    </Text>
-                    {/* Password Textbox */}
-                        <Text style={styles.DesBox2}>
-                            We got
-                            Laura,
-                            Carlos,
-                            Hao,
-                            Tyler.
-                            The whole crew.
-                        </Text>
-                    <Text style={styles.emptyBox}>
-                    </Text>
-                            <MapView
-                                style={styles.mapStyle}
-                                initialRegion={{
-                                    latitude: 48.7343,
-                                    longitude: -122.4866,
-                                    latitudeDelta: 0.0922,
-                                    longitudeDelta: 0.0421,
-                                }}
-                                customMapStyle={mapStyle}>
-                                <Marker
-                                    coordinate={{
-                                    latitude: 48.7343,
-                                    longitude: -122.4866,
-                                    }}
-                                    title={'Event location'}
-                                    description={'The written address of the location'}
-                                />
-                            </MapView>
-                </View>
-            </View>
-            {/* Back Button */}
-            <View style={styles.backButton}>
-                <TouchableOpacity
-                style={styles.buttonTouchableOpacity}
-                    onPress={() => {
-                        Actions.HomeScreen()
+    componentDidMount() {
+        var connection = this.props.socket; // get our connection
+        
+        var that = this; // save the context so we can access it in a function
+
+    }
+
+    render(){
+
+        return (
+            <ImageBackground
+                style={styles.background}
+                source={require('../assets/splash.png')}
+            >
+                <LinearGradient
+                    colors={['rgba(255,78,80,1)', 'rgba(249,212,35,1)']}
+                    start={{ x: 0, y: 0.75 }}
+                    end={{ x: 0, y: 1 }}
+                    style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    height: '100%',
                     }}
-                >
-                <Text style={styles.btnTextWhite}>X</Text>
-                </TouchableOpacity>
-            </View>
-        </ImageBackground>
+                />
+                <View style={ styles.flexcontainer }>
+                <FlashMessage ref="myLocalFlashMessage"/>
+                </View>
+                <View style={styles.container}>
+                    <Text style={styles.logo}>Event Information</Text>
+                    <View style={styles.mainPanel}>
+                        
+                        <Text style={styles.title3}> 
+                        {this.state.eventName}
+                        </Text>
 
-    );
+                        <Text style={styles.title}> 
+                        Description
+                        </Text>
+                        {/* event description Textbox */}
+                            <Text style={styles.DesBox}>
+                            {this.state.eventDescription}
+                            </Text>
+                        <Text style={styles.title2}> 
+                        Members
+                        </Text>
+                        {/* members Textbox */}
+                            <Text style={styles.DesBox2}>
+                                We got
+                                Laura,
+                                Carlos,
+                                Hao,
+                                Tyler.
+                                The whole crew.
+                            </Text>
+                        <Text style={styles.emptyBox}>
+                        </Text>
+                                <MapView
+                                    style={styles.mapStyle}
+                                    initialRegion={{
+                                        latitude: 48.7343,
+                                        longitude: -122.4866,
+                                        latitudeDelta: 0.0922,
+                                        longitudeDelta: 0.0421,
+                                    }}
+                                    customMapStyle={mapStyle}>
+                                    <Marker
+                                        coordinate={{
+                                        latitude: 48.7343,
+                                        longitude: -122.4866,
+                                        }}
+                                        title={'Event location'}
+                                        description={'The written address of the location'}
+                                    />
+                                </MapView>
+                    </View>
+                </View>
+                {/* Back Button */}
+                <View style={styles.backButton}>
+                    <TouchableOpacity
+                    style={styles.buttonTouchableOpacity}
+                        onPress={() => {
+                            Actions.pop()
+                        }}
+                    >
+                    <Text style={styles.btnTextWhite}>X</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.buttonContainer}>
+                {/* Join Event Button */}
+                <View style={styles.JoinEventButton}>
+                    <TouchableOpacity
+                    style={styles.buttonTouchableOpacity}
+                        onPress={() => {
+                            Actions.JoinEventScreen()
+                        }}
+                    >
+                        <Text style={styles.btnTextWhite}>Join Event</Text>
+                    </TouchableOpacity>
+                </View>
+                 {/* Map Button */}
+                <View style={styles.JoinEventButton}>
+                    <TouchableOpacity
+                        style={styles.buttonTouchableOpacity}
+                            onPress={() => {
+                                Actions.MapScreen({firstName: this.state.firstName, lastName: this.state.lastName});
+                            }}
+                        >
+                        <Text style={styles.btnTextWhite}>Map</Text>
+                    </TouchableOpacity>
+                 </View>
+                {/* Home Button */}
+                <View style={styles.JoinEventButton}>
+                    <TouchableOpacity
+                    style={styles.buttonTouchableOpacity}
+                        onPress={() => {
+                            Actions.pop()
+                            Actions.pop()
+                        }}
+                    >
+                        <Text style={styles.btnTextWhite}>Home</Text>
+                    </TouchableOpacity>
+                </View>
+                {/* Your Events Button */}
+                <View style={styles.JoinEventButton}>
+                    <TouchableOpacity
+                        style={styles.buttonTouchableOpacity}
+                            onPress={() => {
+                                Actions.YourEventsScreen();
+                            }}
+                        >
+                        <Text style={styles.btnTextWhite}>Your Events</Text>
+                    </TouchableOpacity>
+                 </View>
+
+                {/* Create Event Button */}
+                <View style={styles.JoinEventButton}>
+                    <TouchableOpacity
+                    style={styles.buttonTouchableOpacity}
+                        onPress={() => {
+                            Actions.CreateEventScreen()
+                        }}
+                    >
+                        <Text style={styles.btnTextWhite}>Create Event</Text>
+                    </TouchableOpacity>
+                </View>
+                </View>
+                    {/* Accept Button */}
+                    <View style={styles.AcceptEventButton}>
+                    <TouchableOpacity
+                        style={styles.buttonTouchableOpacity}
+                            onPress={() => {
+                                //flash message
+                                showMessage({
+                                    message: "SUCCESS",
+                                    description: "you have joined the event",
+                                    type: "success",
+                                  });
+                            }}
+                        >
+                        <Text style={styles.btnTextWhite}>Accept</Text>
+                    </TouchableOpacity>
+                 </View>
+            </ImageBackground>
+
+        );
+    }
 }
 
 
@@ -197,22 +298,22 @@ const styles = StyleSheet.create({
     DesBox: {
         width: 380,
         height: 120,
-        backgroundColor: "white",
+        backgroundColor: "pink",
         marginTop: 5,
-        borderRadius: 5,
+        borderWidth: 1,
         textAlign: "left",
     },
     DesBox2: {
         width: 300,
-        height: 90,
-        backgroundColor: "white",
+        height: 140,
+        backgroundColor: "pink",
         marginTop: 30,
-        borderRadius: 5,
+        borderWidth: 1,
         textAlign: "left",
     },
     emptyBox: {
         width: "90%",
-        height: 230,
+        height: 180,
         marginTop: 20,
         borderRadius: 5,
         textAlign: "left",
@@ -307,7 +408,7 @@ const styles = StyleSheet.create({
 
     },
     mainPanel: {
-        marginTop: 70,
+        marginTop: 20,
         alignItems: "center",
         justifyContent: "center",
         width: "100%"
@@ -328,6 +429,47 @@ const styles = StyleSheet.create({
         borderStyle: "solid",
         borderColor: "gray",
     },
+    buttonContainer: {
+        position: 'absolute',
+        alignItems: "center",
+        bottom: 2,
+        left: 0,
+        flex: 1,
+        width: 179,
+        height:110,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    buttonTouchableOpacity: {
+        width: "100%",
+        height: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    JoinEventButton: {
+        width: '48%',
+        height: 120,
+        backgroundColor: "rgba(0,0,0,0.3)",
+        justifyContent: "center",
+        fontWeight: "bold",
+        alignItems: "center",
+    },
+    AcceptEventButton: {
+        width: '38%',
+        height: 60,
+        bottom: 137,
+        backgroundColor: "rgba(0,0,0,0.3)",
+        justifyContent: "center",
+        fontWeight: "bold",
+        alignItems: "center",
+    },
+    flexcontainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+        bottom: 823,
+        
+      },
 });
 
-export default RegisterScreen;
+export default EventInfoScreen;
