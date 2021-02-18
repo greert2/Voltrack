@@ -51,6 +51,27 @@ class CreateEventScreen extends Component {
                             placeholderTextColor={'black'}
                             onChangeText={(eventName) => this.setState({eventName})}
                         />
+                        {/* Event Date Textbox Make it a scroll menu*/}
+                        <TextInput
+                            style={styles.inputBox}
+                            placeholder="Event Date"
+                            placeholderTextColor={'black'}
+                            onChangeText={(eventName) => this.setState({eventName})}
+                        />
+                        {/* Event Time Textbox Make it a scroll menu*/}
+                        <TextInput
+                            style={styles.inputBox}
+                            placeholder="Event Time"
+                            placeholderTextColor={'black'}
+                            onChangeText={(eventName) => this.setState({eventName})}
+                        />
+                        {/* Event Date Textbox Make it a scroll menu*/}
+                        <TextInput
+                            style={styles.inputBox}
+                            placeholder="Event ID"
+                            placeholderTextColor={'black'}
+                            onChangeText={(eventName) => this.setState({eventName})}
+                        />
                         {/* Password Textbox */}
                         <TextInput
                             style={styles.inputBox}
@@ -90,17 +111,67 @@ class CreateEventScreen extends Component {
                         <Text style={styles.btnTextWhite}>Continue</Text>
                     </TouchableOpacity>
                 </View>
-                {/* Back Button */}
-                <View style={styles.backButton}>
+
+
+                <View style={styles.buttonContainer}>
+                {/* Join Event Button */}
+                <View style={styles.JoinEventButton}>
+                    <TouchableOpacity
+                    style={styles.buttonTouchableOpacity}
+                        onPress={() => {
+                            Actions.JoinEventScreen()
+                        }}
+                    >
+                        <Text style={styles.btnTextWhite}>Join Event</Text>
+                    </TouchableOpacity>
+                </View>
+                 {/* Map Button */}
+                <View style={styles.JoinEventButton}>
+                    <TouchableOpacity
+                        style={styles.buttonTouchableOpacity}
+                            onPress={() => {
+                                Actions.MapScreen({firstName: this.state.firstName, lastName: this.state.lastName});
+                            }}
+                        >
+                        <Text style={styles.btnTextWhite}>Map</Text>
+                    </TouchableOpacity>
+                 </View>
+                {/* Home Button */}
+                <View style={styles.JoinEventButton}>
                     <TouchableOpacity
                     style={styles.buttonTouchableOpacity}
                         onPress={() => {
                             Actions.pop()
                         }}
                     >
-                    <Text style={styles.btnTextWhite}>Back</Text>
+                        <Text style={styles.btnTextWhite}>Home</Text>
                     </TouchableOpacity>
                 </View>
+                {/* Your Events Button */}
+                <View style={styles.JoinEventButton}>
+                    <TouchableOpacity
+                        style={styles.buttonTouchableOpacity}
+                            onPress={() => {
+                                Actions.YourEventsScreen();
+                            }}
+                        >
+                        <Text style={styles.btnTextWhite}>Your Events</Text>
+                    </TouchableOpacity>
+                 </View>
+
+                {/* Create Event Button */}
+                <View style={styles.JoinEventButton}>
+                    <TouchableOpacity
+                    style={styles.buttonTouchableOpacity}
+                        onPress={() => {
+                            Actions.CreateEventScreen()
+                        }}
+                    >
+                        <Text style={styles.btnTextWhite}>Create Event</Text>
+                    </TouchableOpacity>
+                </View>
+                </View>
+
             </ImageBackground>
         )
     }
@@ -139,6 +210,7 @@ const styles = StyleSheet.create({
     loginButton: {
         width: '100%',
         height: 70,
+        bottom: 140,
         backgroundColor: "rgba(0,0,0,0.3)",
         alignItems: "center",
         justifyContent: "center",
@@ -149,12 +221,6 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(0,0,0,0.5)",
         justifyContent: "center",
         alignItems: "center",
-    },
-    buttonTouchableOpacity: {
-        width: "100%",
-        height: "100%",
-        alignItems: "center",
-        justifyContent: "center",
     },
     btnTextWhite: {
         color: "#ffffff",
@@ -177,7 +243,7 @@ const styles = StyleSheet.create({
         width: "100%"
     },
     mainPanel: {
-        marginTop: 70,
+        marginTop: 35,
         alignItems: "center",
         justifyContent: "center",
         width: "100%"
@@ -186,7 +252,32 @@ const styles = StyleSheet.create({
         flex: 1,
         height: 100,
         resizeMode: "contain",
-    }
+    },
+    buttonContainer: {
+        position: 'absolute',
+        alignItems: "center",
+        bottom: 2,
+        left: 0,
+        flex: 1,
+        width: 179,
+        height:110,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    buttonTouchableOpacity: {
+        width: "100%",
+        height: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    JoinEventButton: {
+        width: '48%',
+        height: 120,
+        backgroundColor: "rgba(0,0,0,0.3)",
+        justifyContent: "center",
+        fontWeight: "bold",
+        alignItems: "center",
+    },
 });
 
 export default CreateEventScreen;
