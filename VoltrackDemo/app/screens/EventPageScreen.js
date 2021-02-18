@@ -7,7 +7,7 @@ import MapView, {Marker} from 'react-native-maps';
 import {SafeAreaView} from 'react-native';
 
 
-function RegisterScreen(props) {
+function EventPageScreen(props) {
     return (
         <ImageBackground
             style={styles.background}
@@ -33,49 +33,69 @@ function RegisterScreen(props) {
                     Event Name
                     </Text>
 
-                    <Text style={styles.title}> 
-                    Description
-                    </Text>
-                    {/* Username Textbox */}
-                        <Text style={styles.DesBox}>
-                        This is the event description,
-                        lots of Information
 
-                        </Text>
-                    <Text style={styles.title2}> 
-                    Members
-                    </Text>
-                    {/* Password Textbox */}
-                        <Text style={styles.DesBox2}>
-                            We got
-                            Laura,
-                            Carlos,
-                            Hao,
-                            Tyler.
-                            The whole crew.
-                        </Text>
-                    <Text style={styles.emptyBox}>
-                    </Text>
-                            <MapView
-                                style={styles.mapStyle}
-                                initialRegion={{
-                                    latitude: 48.7343,
-                                    longitude: -122.4866,
-                                    latitudeDelta: 0.0922,
-                                    longitudeDelta: 0.0421,
-                                }}
-                                customMapStyle={mapStyle}>
-                                <Marker
-                                    coordinate={{
-                                    latitude: 48.7343,
-                                    longitude: -122.4866,
-                                    }}
-                                    title={'Event location'}
-                                    description={'The written address of the location'}
-                                />
-                            </MapView>
+
                 </View>
             </View>
+            <View style={styles.buttonContainer}>
+                {/* Join Event Button */}
+                <View style={styles.JoinEventButton}>
+                    <TouchableOpacity
+                    style={styles.buttonTouchableOpacity}
+                        onPress={() => {
+                            Actions.JoinEventScreen()
+                        }}
+                    >
+                        <Text style={styles.btnTextWhite}>Join Event</Text>
+                    </TouchableOpacity>
+                </View>
+                 {/* Map Button */}
+                <View style={styles.JoinEventButton}>
+                    <TouchableOpacity
+                        style={styles.buttonTouchableOpacity}
+                            onPress={() => {
+                                Actions.MapScreen({firstName: this.state.firstName, lastName: this.state.lastName});
+                            }}
+                        >
+                        <Text style={styles.btnTextWhite}>Map</Text>
+                    </TouchableOpacity>
+                 </View>
+                {/* Home Button */}
+                <View style={styles.JoinEventButton}>
+                    <TouchableOpacity
+                    style={styles.buttonTouchableOpacity}
+                        onPress={() => {
+                            Actions.pop()
+                            Actions.pop()
+                        }}
+                    >
+                        <Text style={styles.btnTextWhite}>Home</Text>
+                    </TouchableOpacity>
+                </View>
+                {/* Your Events Button */}
+                <View style={styles.JoinEventButton}>
+                    <TouchableOpacity
+                        style={styles.buttonTouchableOpacity}
+                            onPress={() => {
+                                Actions.YourEventsScreen();
+                            }}
+                        >
+                        <Text style={styles.btnTextWhite}>Your Events</Text>
+                    </TouchableOpacity>
+                 </View>
+
+                {/* Create Event Button */}
+                <View style={styles.JoinEventButton}>
+                    <TouchableOpacity
+                    style={styles.buttonTouchableOpacity}
+                        onPress={() => {
+                            Actions.CreateEventScreen()
+                        }}
+                    >
+                        <Text style={styles.btnTextWhite}>Create Event</Text>
+                    </TouchableOpacity>
+                </View>
+                </View>
         </ImageBackground>
 
     );
@@ -357,8 +377,33 @@ const styles = StyleSheet.create({
     list: {
         width: "100%",
         height: 280,
-    }
+    },
+    buttonContainer: {
+        position: 'absolute',
+        alignItems: "center",
+        bottom: 2,
+        left: 0,
+        flex: 1,
+        width: 179,
+        height:110,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    buttonTouchableOpacity: {
+        width: "100%",
+        height: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    JoinEventButton: {
+        width: '48%',
+        height: 120,
+        backgroundColor: "rgba(0,0,0,0.3)",
+        justifyContent: "center",
+        fontWeight: "bold",
+        alignItems: "center",
+    },
 });
 
 
-export default RegisterScreen;
+export default EventPageScreen;
