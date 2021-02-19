@@ -25,7 +25,8 @@ var sql_connection = mysql.createConnection({
     host: 'localhost', // Use the server address of XAMPP!
     user: 'root',
     password: 'Voltrack2021!DB',
-    database: 'voltrack'
+    database: 'voltrack',
+    debug: true
 });
 
 sql_connection.connect(function(err) {
@@ -60,15 +61,14 @@ let accountExists = function(username) {
 // Returns 'result = false' if a user does not exist... Returns an error if the user does already exist
 let getAccountInfo = function(username) {
     return new Promise(function(resolve, reject) {
-        console.log("Running: " + 'SELECT firstName, lastName, phone FROM users WHERE username = ' + username);
-        sql_connection.query('SELECT firstName, lastName, phone FROM users WHERE username = ?', username, function(err, results) {
+        sql_connection.query('SELECT id, firstName, lastName, phone FROM users WHERE username = ?', username, function(err, results) {
             if(err) {
                 console.log("Error selecting username: " + username);
             }else {
                 console.log("size of res: " + results.length); // DEBUG
                 if(results.length > 0) {
                     console.log("func: Got user."); // DEBUG
-                    resolve(results);
+                    resolve(results[0]);
                 }else {
                     reject(new Error("Could not retrieve user info."));
                 }
@@ -86,7 +86,7 @@ let eventExists = function(eventId) {
                 console.log("Error selecting eventId: " + eventId);
                 var doesExist = true; // don't let them register event..just in case
             }else {
-                // console.log("size of res: " + results.length);
+                // console.log("size of res: " + results.length); // DEBUG
                 if(results.length > 0) {
                     // console.log("func: User already exists.");
                     reject(new Error("Event with this id already exists"));
@@ -106,11 +106,12 @@ let eventExists = function(eventId) {
 // If successful, returns an object containing the eventName, description, and default location string.
 let canJoinEvent = function(eventId, passcode) {
     return new Promise(function(resolve, reject) {
-        sql_connection.query('SELECT name, description, location FROM events WHERE id = ? AND passcode = ?', eventId, passcode, function(err, results) {
+        console.log("canJoinEvent-- id:" + eventId + " passcode:" + passcode);
+        sql_connection.query('SELECT name, description, location FROM events WHERE id = ? AND passcode = ?', [eventId, passcode], function(err, results) {
             if(err) {
                 console.log("Error selecting eventId: " + eventId);
             }else {
-                // console.log("size of res: " + results.length);
+                // console.log("canJoinEvent-- size of res: " + results.length); // DEBUG
                 if(results.length > 0) {
                     resolve(results[0]) // user can join this event.. send back event info
                 }else {
@@ -123,10 +124,10 @@ let canJoinEvent = function(eventId, passcode) {
 
 
 // doJoinEvent()
-// Given a userId and a eventId, makes a user join an event by putting an entry in the 'joined_events' table
-let doJoinEvent = function(userId, eventId) {
+// Given a userId, eventId, and location string, makes a user join an event by putting an entry in the 'joined_events' table
+let doJoinEvent = function(userId, eventId, location) {
     const defaultLocation = 'default';
-    sql_connection.query('INSERT INTO joined_events (userid, eventid, location) VALUES (?, ?, ?)', [userid, eventid, defaultLocation], function(err, result) {
+    sql_connection.query('INSERT INTO joined_events (userid, eventid, location) VALUES (?, ?, ?)', [userId, eventId, location], function(err, result) {
         if(err) throw err;
         console.log("Inserted into db!");
     })
@@ -137,6 +138,7 @@ let doJoinEvent = function(userId, eventId) {
 let getHashedPassFromDB = function(username) {
     return new Promise(function(resolve, reject) {
         sql_connection.query('SELECT password FROM users WHERE username = ?', username, function(err, results) {
+            
             if(err) {
                 console.log("Error selecting username: " + username);
             }else {
@@ -305,8 +307,8 @@ io.on('connection', function(socket) {
         })
     })
 
-    socket.on('doJoinEvent', function(userId, eventId) {
-        doJoinEvent(userId, eventId);
+    socket.on('doJoinEvent', function(userId, eventId, location) {
+        doJoinEvent(userId, eventId, location);
     })
 
 

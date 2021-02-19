@@ -20,17 +20,17 @@ class EventInfoScreen extends Component {
             eventDescription: '',
             eventLocation: '',
         }
-        
     }
 
     componentDidMount() {
-        var connection = this.props.socket; // get our connection
+        
         
         var that = this; // save the context so we can access it in a function
 
     }
 
     render(){
+        var connection = this.props.socket; // get our connection
 
         return (
             <ImageBackground
@@ -57,7 +57,7 @@ class EventInfoScreen extends Component {
                     <View style={styles.mainPanel}>
                         
                         <Text style={styles.title3}> 
-                        {this.state.eventName}
+                        {this.props.eventName}
                         </Text>
 
                         <Text style={styles.title}> 
@@ -65,7 +65,7 @@ class EventInfoScreen extends Component {
                         </Text>
                         {/* event description Textbox */}
                             <Text style={styles.DesBox}>
-                            {this.state.eventDescription}
+                            {this.props.eventDescription}
                             </Text>
                         <Text style={styles.title2}> 
                         Members
@@ -165,6 +165,7 @@ class EventInfoScreen extends Component {
                     <TouchableOpacity
                         style={styles.buttonTouchableOpacity}
                             onPress={() => {
+                                connection.doJoinEvent(this.props.userid, this.props.eventid, 'testLocation');
                                 //flash message
                                 showMessage({
                                     message: "SUCCESS",
