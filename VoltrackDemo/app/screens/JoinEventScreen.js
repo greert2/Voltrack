@@ -56,7 +56,7 @@ class JoinEventScreen extends Component {
                             placeholder="Passcode"
                             placeholderTextColor={'black'}
                             secureTextEntry={true}
-                            onChangeText={(eventid) => this.setState({eventid})}
+                            onChangeText={(passcode) => this.setState({passcode})}
                         />
                     </View>
                 </View>
@@ -65,20 +65,22 @@ class JoinEventScreen extends Component {
                     <TouchableOpacity
                     style={styles.buttonTouchableOpacity}
                         onPress={() => {
+                            var that = this; // store context
 
                             connection.canJoinEvent(this.state.eventid, this.state.passcode)
-                            .then(results => {                                
+                            .then(function(result) {                                
                                 // Update the state
                                 that.setState({
-                                     eventName: results[0],
-                                     eventDescription: results[1],
-                                     eventLocation: results[2]
+                                     eventName: result.name,
+                                     eventDescription: result.description,
+                                     eventLocation: result.location
                                 })
-                                    //Actions.EventInfoScreen({eventid: this.state.eventid, eventName: this.state.eventName, eventDescription: this.state.eventDescription, eventLocation: this.state.eventLocation, socket: connection});
-                            }, error => {
-                                return{error};
+                                    Actions.EventInfoScreen({userid: that.props.userid, eventid: that.state.eventid, eventName: that.state.eventName, eventDescription: that.state.eventDescription, eventLocation: that.state.eventLocation, socket: connection});
                             })
-                            Actions.EventInfoScreen({eventid: this.state.eventid, eventName: this.state.eventName, eventDescription: this.state.eventDescription, eventLocation: this.state.eventLocation, socket: connection});
+                            .catch(function(err) {
+                                console.log(err);
+                            })
+                            
 
                                         
                         }}

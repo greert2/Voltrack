@@ -55,9 +55,10 @@ export let getAccountInfo = function(username, userInfoObj) {
                     // alert("Error retrieving account information.");  // DEBUG
                     reject(new Error("Error retrieving account information."))
                 }else {
-                    console.log("output: " + res[0].firstName);
-                    let arr = [res[0].firstName, res[0].lastName, res[0].phone];
-                    resolve(arr);
+                    console.log("output: " + res.firstName);
+                    // let arr = [res[0].firstName, res[0].lastName, res[0].phone];
+                    // resolve(arr);
+                    resolve(res);
                 }
             })
         }
@@ -69,13 +70,12 @@ export let canJoinEvent = function(eventId, passcode) {
     return new Promise(function(resolve, reject) {
         if(socket.connected) {
             socket.emit('canJoinEvent', eventId, passcode, function(res) {
+                console.log("eventId: " + eventId + ", passcode: " + passcode);
+                console.log("type?: " + Object.prototype.toString.call(passcode));
                 if(res == false) {
-                    // alert("Error retrieving account information.");  // DEBUG
                     reject(new Error("EventId or Passcode incorrect"))
                 }else {
-                    console.log("output: " + res[0].firstName);
-                    let arr = [res[0].firstName, res[0].lastName, res[0].phone];
-                    resolve(arr);
+                    resolve(res); // got the event
                 }
             })
         }
@@ -83,9 +83,9 @@ export let canJoinEvent = function(eventId, passcode) {
 }
 
 
-export let doJoinEvent = function(userId, eventId) {
+export let doJoinEvent = function(userId, eventId, location) {
     if(socket.connected) {
-        socket.emit('doJoinEvent', userId, eventId)
+        socket.emit('doJoinEvent', userId, eventId, location)
     }
 }
 

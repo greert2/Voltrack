@@ -11,6 +11,7 @@ class HomeScreen extends Component {
     constructor(props) {
         super(props);
         this.state = { 
+            id: '',
             username: '',
             firstName: '',
             lastName: '',
@@ -27,13 +28,15 @@ class HomeScreen extends Component {
         connection.getAccountInfo({username: this.props.username})
         .then(function(result) {
             // Got user account info
-            let resultArr = result;
+            // let resultArr = result;
+            
 
             // Update the state
             that.setState({
-                 firstName: resultArr[0],
-                 lastName: resultArr[1],
-                 phone: resultArr[2]
+                 id: result.id,
+                 firstName: result.firstName,
+                 lastName: result.lastName,
+                 phone: result.phone
             })
             
         })
@@ -53,7 +56,7 @@ class HomeScreen extends Component {
             { name: 'Carlos', key: '3'},
             { name: 'Laura', key: '4'},
         ]
-        
+        console.log("id: " + this.state.id);
         
         return (
 
@@ -92,7 +95,7 @@ class HomeScreen extends Component {
                     <TouchableOpacity
                     style={styles.buttonTouchableOpacity}
                         onPress={() => {
-                            Actions.JoinEventScreen()
+                            Actions.JoinEventScreen({userid: this.state.id})
                         }}
                     >
                         <Text style={styles.btnTextWhite}>Join Event</Text>
