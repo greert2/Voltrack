@@ -126,11 +126,32 @@ let canJoinEvent = function(eventId, passcode) {
 // doJoinEvent()
 // Given a userId, eventId, and location string, makes a user join an event by putting an entry in the 'joined_events' table
 let doJoinEvent = function(userId, eventId, location) {
-    const defaultLocation = 'default';
-    sql_connection.query('INSERT INTO joined_events (userid, eventid, location) VALUES (?, ?, ?)', [userId, eventId, location], function(err, result) {
-        if(err) throw err;
-        console.log("Inserted into db!");
+    return new Promise(function(resolve, reject) {
+        // Check if user is already in this event
+        sql_connection.query('SELECT * FROM joined_events WHERE userid = ? AND eventid = ?', [userId, eventId], function(err, results) {
+            if(err) {
+                console.log("Error while checking if user is already in event.");
+                reject(new Error("Error while checking if user is already in event."));
+            }else {
+                if(results.length > 0) {
+                    // the user is already in this event. do not let them join again.
+                    console.log("Error: user is already in this event.")
+                    reject(new Error("Error: user is already in this event."));
+                }else {
+                    // add the user to the event
+                    sql_connection.query('INSERT INTO joined_events (userid, eventid, location) VALUES (?, ?, ?)', [userId, eventId, location], function(err, result) {
+                        if(err) throw err;
+                        console.log("Inserted into db!");
+                        resolve(true);
+                    })
+                }
+            }
+        })
     })
+
+    
+
+   
 }
 
 
@@ -307,8 +328,14 @@ io.on('connection', function(socket) {
         })
     })
 
-    socket.on('doJoinEvent', function(userId, eventId, location) {
-        doJoinEvent(userId, eventId, location);
+    socket.on('doJoinEvent', function(userId, eventId, location, fn) {
+        doJoinEvent(userId, eventId, location)
+        .then(function(result) {
+            fn(result);
+        })
+        .catch(function(err) {
+            fn(err);
+        })
     })
 
 

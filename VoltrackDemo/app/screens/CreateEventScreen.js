@@ -41,6 +41,17 @@ class CreateEventScreen extends Component {
                     }}
                 />
                 <View style={styles.container}>
+                    {/* Back Button */}
+                    <View style={styles.backButton}>
+                        <TouchableOpacity
+                            style={styles.buttonTouchableOpacity}
+                            onPress={() => {
+                                Actions.pop()
+                            }}
+                        >
+                            <Text style={styles.btnTextBlack, { fontSize: 30, marginLeft: 15 }}>&larr;</Text>
+                        </TouchableOpacity>
+                    </View>
                     <Image style={styles.image} source={require('../assets/voltrackLogo.png')}/>
                     <Text style={styles.logo}>Create Event</Text>
                     <View style={styles.mainPanel}>
@@ -48,27 +59,6 @@ class CreateEventScreen extends Component {
                         <TextInput
                             style={styles.inputBox}
                             placeholder="Event Name"
-                            placeholderTextColor={'black'}
-                            onChangeText={(eventName) => this.setState({eventName})}
-                        />
-                        {/* Event Date Textbox Make it a scroll menu*/}
-                        <TextInput
-                            style={styles.inputBox}
-                            placeholder="Event Date"
-                            placeholderTextColor={'black'}
-                            onChangeText={(eventName) => this.setState({eventName})}
-                        />
-                        {/* Event Time Textbox Make it a scroll menu*/}
-                        <TextInput
-                            style={styles.inputBox}
-                            placeholder="Event Time"
-                            placeholderTextColor={'black'}
-                            onChangeText={(eventName) => this.setState({eventName})}
-                        />
-                        {/* Event Date Textbox Make it a scroll menu*/}
-                        <TextInput
-                            style={styles.inputBox}
-                            placeholder="Event ID"
                             placeholderTextColor={'black'}
                             onChangeText={(eventName) => this.setState({eventName})}
                         />
@@ -88,7 +78,7 @@ class CreateEventScreen extends Component {
                         />
                     </View>
                 </View>
-                {/* Set Location Button */}
+                {/* Continue Button */}
                 <View style={styles.loginButton}>
                     <TouchableOpacity
                     style={styles.buttonTouchableOpacity}
@@ -103,75 +93,12 @@ class CreateEventScreen extends Component {
                                 // Actions.pop();
                             }else {
                                 // showToast()
-                            }
-
-                            
+                            }                           
                         }}
                     >
                         <Text style={styles.btnTextWhite}>Continue</Text>
                     </TouchableOpacity>
                 </View>
-
-
-                <View style={styles.buttonContainer}>
-                {/* Join Event Button */}
-                <View style={styles.JoinEventButton}>
-                    <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                        onPress={() => {
-                            Actions.JoinEventScreen()
-                        }}
-                    >
-                        <Text style={styles.btnTextWhite}>Join Event</Text>
-                    </TouchableOpacity>
-                </View>
-                 {/* Map Button */}
-                <View style={styles.JoinEventButton}>
-                    <TouchableOpacity
-                        style={styles.buttonTouchableOpacity}
-                            onPress={() => {
-                                Actions.MapScreen({firstName: this.state.firstName, lastName: this.state.lastName});
-                            }}
-                        >
-                        <Text style={styles.btnTextWhite}>Map</Text>
-                    </TouchableOpacity>
-                 </View>
-                {/* Home Button */}
-                <View style={styles.JoinEventButton}>
-                    <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                        onPress={() => {
-                            Actions.pop()
-                        }}
-                    >
-                        <Text style={styles.btnTextWhite}>Home</Text>
-                    </TouchableOpacity>
-                </View>
-                {/* Your Events Button */}
-                <View style={styles.JoinEventButton}>
-                    <TouchableOpacity
-                        style={styles.buttonTouchableOpacity}
-                            onPress={() => {
-                                Actions.YourEventsScreen();
-                            }}
-                        >
-                        <Text style={styles.btnTextWhite}>Your Events</Text>
-                    </TouchableOpacity>
-                 </View>
-
-                {/* Create Event Button */}
-                <View style={styles.JoinEventButton}>
-                    <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                        onPress={() => {
-                            Actions.CreateEventScreen()
-                        }}
-                    >
-                        <Text style={styles.btnTextWhite}>Create Event</Text>
-                    </TouchableOpacity>
-                </View>
-                </View>
-
             </ImageBackground>
         )
     }
@@ -209,18 +136,23 @@ const styles = StyleSheet.create({
     },
     loginButton: {
         width: '100%',
-        height: 70,
-        bottom: 140,
+        height: 100,
         backgroundColor: "rgba(0,0,0,0.3)",
         alignItems: "center",
         justifyContent: "center",
     },
     backButton: {
+        width: '10%',
+        height: 40,
+        position: 'absolute',
+        alignSelf: 'flex-start',
+        zIndex: 2
+    },
+    buttonTouchableOpacity: {
         width: "100%",
-        height: 80,
-        backgroundColor: "rgba(0,0,0,0.5)",
-        justifyContent: "center",
+        height: "100%",
         alignItems: "center",
+        justifyContent: "center",
     },
     btnTextWhite: {
         color: "#ffffff",
@@ -263,12 +195,6 @@ const styles = StyleSheet.create({
         height:110,
         flexDirection: 'row',
         justifyContent: 'space-between'
-    },
-    buttonTouchableOpacity: {
-        width: "100%",
-        height: "100%",
-        alignItems: "center",
-        justifyContent: "center",
     },
     JoinEventButton: {
         width: '48%',

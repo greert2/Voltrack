@@ -84,9 +84,20 @@ export let canJoinEvent = function(eventId, passcode) {
 
 
 export let doJoinEvent = function(userId, eventId, location) {
-    if(socket.connected) {
-        socket.emit('doJoinEvent', userId, eventId, location)
-    }
+    return new Promise(function(resolve, reject) {
+        if(socket.connected) {
+            socket.emit('doJoinEvent', userId, eventId, location, function(res) {
+                if(res == true) {
+                    // the user joined the event successfully
+                    resolve(true);
+                }else {
+                    // issue when attempting to join the event
+                    reject(false);
+                }
+            });
+        }
+    })
+    
 }
 
 

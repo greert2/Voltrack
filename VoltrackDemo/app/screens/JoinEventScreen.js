@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacity} from 'react-native';
+import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Actions, Router, Scene } from "react-native-router-flux";
 import { TextInput } from 'react-native-gesture-handler';
@@ -13,15 +13,15 @@ class JoinEventScreen extends Component {
         eventLocation: '',
     }
 
-    render(){
+    render() {
 
         // Connect to server here
         var connection = require('../scripts/serverConnection.js');
         connection.connect();
 
         return (
-            <ImageBackground 
-                style={styles.background} 
+            <ImageBackground
+                style={styles.background}
                 source={require('../assets/splash.png')}
             >
                 <LinearGradient
@@ -31,15 +31,26 @@ class JoinEventScreen extends Component {
                     start={{ x: 0, y: 0.75 }}
                     end={{ x: 0, y: 1 }}
                     style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    height: '100%',
+                        position: 'absolute',
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        height: '100%',
                     }}
                 />
                 <View style={styles.container}>
-                    <Image style={styles.image} source={require('../assets/voltrackLogo.png')}/>
+                    {/* Back Button */}
+                    <View style={styles.backButton}>
+                        <TouchableOpacity
+                            style={styles.buttonTouchableOpacity}
+                            onPress={() => {
+                                Actions.pop()
+                            }}
+                        >
+                            <Text style={styles.btnTextBlack, { fontSize: 30, marginLeft: 15 }}>&larr;</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Image style={styles.image} source={require('../assets/voltrackLogo.png')} />
                     <Text style={styles.logo}>Join Event</Text>
                     <View style={styles.mainPanel}>
                         {/* EventID Textbox */}
@@ -48,7 +59,7 @@ class JoinEventScreen extends Component {
                             placeholder="Event ID"
                             placeholderTextColor={'black'}
                             secureTextEntry={false}
-                            onChangeText={(eventid) => this.setState({eventid})}
+                            onChangeText={(eventid) => this.setState({ eventid })}
                         />
                         {/* Passcode Textbox */}
                         <TextInput
@@ -56,100 +67,42 @@ class JoinEventScreen extends Component {
                             placeholder="Passcode"
                             placeholderTextColor={'black'}
                             secureTextEntry={true}
-                            onChangeText={(passcode) => this.setState({passcode})}
+                            onChangeText={(passcode) => this.setState({ passcode })}
                         />
                     </View>
                 </View>
                 {/* Join Event Button */}
                 <View style={styles.joinEventButton}>
                     <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
+                        style={styles.buttonTouchableOpacity}
                         onPress={() => {
                             var that = this; // store context
 
                             connection.canJoinEvent(this.state.eventid, this.state.passcode)
-                            .then(function(result) {                                
-                                // Update the state
-                                that.setState({
-                                     eventName: result.name,
-                                     eventDescription: result.description,
-                                     eventLocation: result.location
+                                .then(function (result) {
+                                    // Update the state
+                                    that.setState({
+                                        eventName: result.name,
+                                        eventDescription: result.description,
+                                        eventLocation: result.location
+                                    })
+                                    Actions.EventInfoScreen({ userid: that.props.userid, eventid: that.state.eventid, eventName: that.state.eventName, eventDescription: that.state.eventDescription, eventLocation: that.state.eventLocation, socket: connection });
                                 })
-                                    Actions.EventInfoScreen({userid: that.props.userid, eventid: that.state.eventid, eventName: that.state.eventName, eventDescription: that.state.eventDescription, eventLocation: that.state.eventLocation, socket: connection});
-                            })
-                            .catch(function(err) {
-                                console.log(err);
-                            })
-                            
+                                .catch(function (err) {
+                                    console.log(err);
+                                })
 
-                                        
+
+
                         }}
                     >
                         <Text style={styles.btnTextWhite}>Join Event</Text>
                     </TouchableOpacity>
-                </View>
-                <View style={styles.buttonContainer}>
-                {/* Join Event Button */}
-                <View style={styles.JoinEventScreenButton}>
-                    <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                        onPress={() => {
-                            Actions.JoinEventScreen()
-                        }}
-                    >
-                        <Text style={styles.btnTextWhite}>Join Event</Text>
-                    </TouchableOpacity>
-                </View>
-                 {/* Map Button */}
-                <View style={styles.JoinEventScreenButton}>
-                    <TouchableOpacity
-                        style={styles.buttonTouchableOpacity}
-                            onPress={() => {
-                                Actions.MapScreen({firstName: this.state.firstName, lastName: this.state.lastName});
-                            }}
-                        >
-                        <Text style={styles.btnTextWhite}>Map</Text>
-                    </TouchableOpacity>
-                 </View>
-                {/* Home Button */}
-                <View style={styles.JoinEventScreenButton}>
-                    <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                        onPress={() => {
-                            Actions.pop()
-                        }}
-                    >
-                        <Text style={styles.btnTextWhite}>Home</Text>
-                    </TouchableOpacity>
-                </View>
-                {/* Your Events Button */}
-                <View style={styles.JoinEventScreenButton}>
-                    <TouchableOpacity
-                        style={styles.buttonTouchableOpacity}
-                            onPress={() => {
-                                Actions.YourEventsScreen();
-                            }}
-                        >
-                        <Text style={styles.btnTextWhite}>Your Events</Text>
-                    </TouchableOpacity>
-                 </View>
-
-                {/* Create Event Button */}
-                <View style={styles.JoinEventScreenButton}>
-                    <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                        onPress={() => {
-                            Actions.CreateEventScreen()
-                        }}
-                    >
-                        <Text style={styles.btnTextWhite}>Create Event</Text>
-                    </TouchableOpacity>
-                </View>
                 </View>
             </ImageBackground>
-            
+
         );
-     }
+    }
 }
 
 const styles = StyleSheet.create({
@@ -166,24 +119,23 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         textAlign: "center",
     },
-    joinEventButton: {
-        width: '100%',
-        height: 70,
-        bottom: 140,
-        backgroundColor: "rgba(0,0,0,0.3)",
-        alignItems: "center",
-        justifyContent: "center",
-    },
     backButton: {
-        width: "100%",
-        height: 80,
-        backgroundColor: "rgba(0,0,0,0.5)",
-        justifyContent: "center",
-        alignItems: "center",
+        width: '10%',
+        height: 40,
+        position: 'absolute',
+        alignSelf: 'flex-start',
+        zIndex: 2
     },
     buttonTouchableOpacity: {
         width: "100%",
         height: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    joinEventButton: {
+        width: '100%',
+        height: 100,
+        backgroundColor: "rgba(0,0,0,0.3)",
         alignItems: "center",
         justifyContent: "center",
     },
@@ -233,7 +185,7 @@ const styles = StyleSheet.create({
         left: 0,
         flex: 1,
         width: 179,
-        height:110,
+        height: 110,
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
