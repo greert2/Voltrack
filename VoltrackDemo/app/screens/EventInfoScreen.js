@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacity} from 'react-native';
+import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacity, ScrolView} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Actions, Router, Scene } from "react-native-router-flux";
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import MapView, {Marker} from 'react-native-maps';
 import {SafeAreaView} from 'react-native';
-import FlashMessage from "react-native-flash-message";
+import FlashMessage from 'react-native-flash-message'
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { StackActions } from '@react-navigation/native';
 
@@ -37,147 +37,111 @@ class EventInfoScreen extends Component {
                 style={styles.background}
                 source={require('../assets/splash.png')}
             >
-                <LinearGradient
-                    colors={['rgba(255,78,80,1)', 'rgba(249,212,35,1)']}
-                    start={{ x: 0, y: 0.75 }}
-                    end={{ x: 0, y: 1 }}
-                    style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    height: '100%',
-                    }}
-                />
-                <View style={ styles.flexcontainer }>
-                <FlashMessage ref="myLocalFlashMessage"/>
-                </View>
-                <View style={styles.container}>
-                    <Text style={styles.logo}>Event Information</Text>
-                    <View style={styles.mainPanel}>
-                        
-                        <Text style={styles.title3}> 
-                        {this.props.eventName}
-                        </Text>
-
-                        <Text style={styles.title}> 
-                        Description
-                        </Text>
-                        {/* event description Textbox */}
-                            <Text style={styles.DesBox}>
-                            {this.props.eventDescription}
-                            </Text>
-                        <Text style={styles.title2}> 
-                        Members
-                        </Text>
-                        {/* members Textbox */}
-                            <Text style={styles.DesBox2}>
-                                We got
-                                Laura,
-                                Carlos,
-                                Hao,
-                                Tyler.
-                                The whole crew.
-                            </Text>
-                        <Text style={styles.emptyBox}>
-                        </Text>
-                                <MapView
-                                    style={styles.mapStyle}
-                                    initialRegion={{
-                                        latitude: 48.7343,
-                                        longitude: -122.4866,
-                                        latitudeDelta: 0.0922,
-                                        longitudeDelta: 0.0421,
-                                    }}
-                                    customMapStyle={mapStyle}>
-                                    <Marker
-                                        coordinate={{
-                                        latitude: 48.7343,
-                                        longitude: -122.4866,
-                                        }}
-                                        title={'Event location'}
-                                        description={'The written address of the location'}
-                                    />
-                                </MapView>
+                    <LinearGradient
+                        colors={['rgba(255,78,80,1)', 'rgba(249,212,35,1)']}
+                        start={{ x: 0, y: 0.75 }}
+                        end={{ x: 0, y: 1 }}
+                        style={{
+                            position: 'absolute',
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            height: '100%',
+                            flex: 1
+                        }}
+                    />
+                <ScrollView>
+                    <View style={ styles.flexcontainer }>
+                    <FlashMessage ref="myLocalFlashMessage"/>
                     </View>
-                </View>
-                <View style={styles.buttonContainer}>
-                {/* Join Event Button */}
-                <View style={styles.JoinEventButton}>
-                    <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                        onPress={() => {
-                            Actions.JoinEventScreen()
-                        }}
-                    >
-                        <Text style={styles.btnTextWhite}>Join Event</Text>
-                    </TouchableOpacity>
-                </View>
-                 {/* Map Button */}
-                <View style={styles.JoinEventButton}>
-                    <TouchableOpacity
-                        style={styles.buttonTouchableOpacity}
-                            onPress={() => {
-                                Actions.MapScreen({firstName: this.state.firstName, lastName: this.state.lastName});
-                            }}
-                        >
-                        <Text style={styles.btnTextWhite}>Map</Text>
-                    </TouchableOpacity>
-                 </View>
-                {/* Home Button */}
-                <View style={styles.JoinEventButton}>
-                    <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                        onPress={() => {
-                            Actions.pop()
-                            Actions.pop()
-                        }}
-                    >
-                        <Text style={styles.btnTextWhite}>Home</Text>
-                    </TouchableOpacity>
-                </View>
-                {/* Your Events Button */}
-                <View style={styles.JoinEventButton}>
-                    <TouchableOpacity
-                        style={styles.buttonTouchableOpacity}
-                            onPress={() => {
-                                Actions.YourEventsScreen();
-                            }}
-                        >
-                        <Text style={styles.btnTextWhite}>Your Events</Text>
-                    </TouchableOpacity>
-                 </View>
+                    <View style={styles.container}>
+                        <Text style={styles.logo}>Event Information</Text>
+                        <View style={styles.mainPanel}>
+                            
+                            <Text style={styles.title3}> 
+                            {this.props.eventName}
+                            </Text>
 
-                {/* Create Event Button */}
-                <View style={styles.JoinEventButton}>
-                    <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                        onPress={() => {
-                            Actions.CreateEventScreen()
-                        }}
-                    >
-                        <Text style={styles.btnTextWhite}>Create Event</Text>
-                    </TouchableOpacity>
-                </View>
-                </View>
-                    {/* Accept Button */}
-                    <View style={styles.AcceptEventButton}>
-                    <TouchableOpacity
-                        style={styles.buttonTouchableOpacity}
-                            onPress={() => {
-                                connection.doJoinEvent(this.props.userid, this.props.eventid, 'testLocation');
-                                //flash message
-                                showMessage({
-                                    message: "SUCCESS",
-                                    description: "you have joined the event",
-                                    type: "success",
-                                  });
-                            }}
-                        >
-                        <Text style={styles.btnTextWhite}>Accept</Text>
-                    </TouchableOpacity>
-                 </View>
+                            <Text style={styles.title}> 
+                            Description
+                            </Text>
+                            {/* event description Textbox */}
+                                <Text style={styles.DesBox}>
+                                {this.props.eventDescription}
+                                </Text>
+                            <Text style={styles.title2}> 
+                            Members
+                            </Text>
+                            {/* members Textbox */}
+                                <Text style={styles.DesBox2}>
+                                    We got
+                                    Laura,
+                                    Carlos,
+                                    Hao,
+                                    Tyler.
+                                    The whole crew.
+                                </Text>
+                            <Text style={styles.emptyBox}>
+                            </Text>
+                                    <MapView
+                                        style={styles.mapStyle}
+                                        initialRegion={{
+                                            latitude: 48.7343,
+                                            longitude: -122.4866,
+                                            latitudeDelta: 0.0922,
+                                            longitudeDelta: 0.0421,
+                                        }}
+                                        customMapStyle={mapStyle}>
+                                        <Marker
+                                            coordinate={{
+                                            latitude: 48.7343,
+                                            longitude: -122.4866,
+                                            }}
+                                            title={'Event location'}
+                                            description={'The written address of the location'}
+                                        />
+                                    </MapView>
+                        </View>
+                            {/* Accept Button */}
+                            <View style={styles.AcceptEventButton}>
+                                <TouchableOpacity
+                                    style={styles.buttonTouchableOpacity}
+                                        onPress={() => {
+                                            connection.doJoinEvent(this.props.userid, this.props.eventid, 'testLocation')
+                                            .then(function(result) {
+                                                // user joined the event
+                                                //flash message
+                                                // showMessage({
+                                                //     message: "SUCCESS",
+                                                //     description: "you have joined the event",
+                                                //     type: "success",
+                                                // });
+                                                alert("You have joined the event!");
+                                                console.log("Successfully joined!");
+                                                Actions.popTo('HomeScreen');
+                                            })
+                                            .catch(function(err) {
+                                                // showMessage({
+                                                //     message: "FAILURE",
+                                                //     description: "could not join the event",
+                                                //     type: "success",
+                                                // });
+                                                alert("You are already part of this event!");
+                                                console.log("Could not join event.");
+                                                Actions.popTo('HomeScreen');
+                                            })
+                                            
+                                        }}
+                                    >
+                                    <Text style={styles.btnTextWhite}>Accept</Text>
+                                </TouchableOpacity>
+                            </View>
+                    </View>
+                    
+                        
+                </ScrollView>
             </ImageBackground>
+            
 
         );
     }
@@ -280,10 +244,9 @@ const mapStyle = [
 
 
 const styles = StyleSheet.create({
+
     background: {
         flex: 1,
-        justifyContent: "flex-end",
-        alignItems: "center",
     },
     DesBox: {
         width: 380,
@@ -447,7 +410,7 @@ const styles = StyleSheet.create({
     AcceptEventButton: {
         width: '38%',
         height: 60,
-        bottom: 143,
+        // bottom: 143,
         backgroundColor: "rgba(0,0,0,0.3)",
         justifyContent: "center",
         fontWeight: "bold",
