@@ -45,7 +45,6 @@ export function createEvent(eventName, passcode, description, location) {
 }
 
 
-
 export let getAccountInfo = function(username, userInfoObj) {
     return new Promise(function(resolve, reject) {
         username = username.username; // 'unwrap' the object to text
@@ -100,7 +99,28 @@ export let doJoinEvent = function(userId, eventId, location) {
     
 }
 
+export function updateLocation(userId, location) {
+    if(socket.connected) {
+        socket.emit('updateLocation', [userId, location]);
+    }
+}
 
+export let getLocations = function(eventId) {
+    return new Promise(function(resolve, reject) {
+        if(socket.connected) {
+            socket.emit('getLocations', eventId, function(res) {
+                if(res) {
+                    // got the locations
+                    resolve(res);
+                }else {
+                    // issue when attempting to get locations
+                    reject(false);
+                }
+            });
+        }
+    })
+    
+}
 
 
 // This may be entirely unneeded depending on our structure.

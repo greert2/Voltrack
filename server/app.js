@@ -13,6 +13,7 @@ var io = require('socket.io')(server);
 var mysql = require('mysql');
 var bcrypt = require('bcryptjs');
 const { brotliCompressSync } = require('zlib');
+const e = require('express');
 
 server.listen(3000);
 
@@ -174,6 +175,30 @@ let getHashedPassFromDB = function(username) {
     })
 }
 
+// Used for getting location of all users in an event. 
+// Resolves an array of objects of the following form
+// results[0] {
+//      userid: their userid,
+//      firstname: their first name,
+//      lastname: their last name,
+//      location: their location string
+// }
+let getLocations = function(eventId) {
+    return new Promise(function(resolve, reject) {
+        sql_connection.query('SELECT userid, firstname, lastname, joined_events.location FROM joined_events JOIN users ON joined_events.userid = users.id WHERE eventid = ?', eventId, function(err, results) {
+            if(err) {
+                console.log("Error selecting eventid: " + eventId);
+            }else {
+                if(results.length > 0) {
+                    console.log("Got results. Lenght: " + results.length);
+                    resolve(results);
+                }else {
+                    reject(err);
+                }
+            }
+        });
+    })
+}
 
 
 // Connect
@@ -315,7 +340,7 @@ io.on('connection', function(socket) {
 
     })
     
-    // Join event
+    // checks if the eventId exists and the passcode is correct
     socket.on('canJoinEvent', function(eventId, passcode, fn) {
         canJoinEvent(eventId, passcode)
         .then(function(result) {
@@ -328,6 +353,7 @@ io.on('connection', function(socket) {
         })
     })
 
+    // given a userId, eventId, and a starting location string, joins a user to an event
     socket.on('doJoinEvent', function(userId, eventId, location, fn) {
         doJoinEvent(userId, eventId, location)
         .then(function(result) {
@@ -338,6 +364,24 @@ io.on('connection', function(socket) {
         })
     })
 
+    // given a userId and a location string, updates it in the database
+    socket.on('updateLocation', function(userId, location, fn) {
+        sql_connection.query('UPDATE joined_events SET location = ? WHERE userid = ?', [location, userId], function(err, result) {
+            if(err) throw err;
+            console.log("Updated location in db!");
+        })
+    })
+
+    // given an eventId, gets user location. See function defined above for format of resove
+    socket.on('getLocations', function(eventId, fn) {
+        getLocations(eventId)
+        .then(function(result) {
+            fn(result);
+        })
+        .catch(function(err) {
+            fn(err);
+        })
+    })
 
 });
 
