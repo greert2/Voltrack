@@ -179,11 +179,13 @@ let getHashedPassFromDB = function(username) {
 // Resolves an array of objects of the following form
 // results[0] {
 //      userid: their userid,
+//      firstname: their first name,
+//      lastname: their last name,
 //      location: their location string
 // }
 let getLocations = function(eventId) {
     return new Promise(function(resolve, reject) {
-        sql_connection.query('SELECT userid, location FROM joined_events WHERE eventid = ?', eventId, function(err, results) {
+        sql_connection.query('SELECT userid, firstname, lastname, joined_events.location FROM joined_events JOIN users ON joined_events.userid = users.id WHERE eventid = ?', eventId, function(err, results) {
             if(err) {
                 console.log("Error selecting eventid: " + eventId);
             }else {
