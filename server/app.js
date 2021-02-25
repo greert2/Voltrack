@@ -149,11 +149,9 @@ let doJoinEvent = function(userId, eventId, location) {
             }
         })
     })
-
-    
-
-   
 }
+
+
 
 
 // Promises a hashed password (given it is used on a previously proven username)
@@ -191,6 +189,53 @@ let getLocations = function(eventId) {
             }else {
                 if(results.length > 0) {
                     console.log("Got results. Lenght: " + results.length);
+                    resolve(results);
+                }else {
+                    reject(err);
+                }
+            }
+        });
+    })
+}
+
+// Used to check if a user is in an event
+// Resolves an object of the following form
+// result {
+//      eventid: the id of the event they're in
+//      name: the name of the event they're in
+// }
+let isUserInEvent = function(userId) {
+    return new Promise(function(resolve, reject) {
+        sql_connection.query('SELECT eventid, name FROM joined_events JOIN events ON joined_events.eventid = events.id WHERE userid = ?', userId, function(err, results) {
+            if(err) {
+                console.log("Error selecting userid: " + userId);
+            }else {
+                if(results.length > 0) {
+                    resolve(results[0]); // resolve the first (and theoretically only) result
+                }else {
+                    reject(err);
+                }
+            }
+        });
+    })
+}
+
+
+// Used for getting information of all users in an event (including contact info)
+// Resolves an array of objects of the following form
+// results[0] {
+//      userid: their userid,
+//      firstname: their first name,
+//      lastname: their last name,
+//      phone: their phone string
+// }
+let getUsersInEvent = function(eventId) {
+    return new Promise(function(resolve, reject) {
+        sql_connection.query('SELECT userid, firstname, lastname, phone FROM users JOIN joined_events ON joined_events.userid = users.id WHERE eventid = ?', eventId, function(err, results) {
+            if(err) {
+                console.log("Error selecting eventid: " + eventId);
+            }else {
+                if(results.length > 0) {
                     resolve(results);
                 }else {
                     reject(err);
@@ -375,6 +420,28 @@ io.on('connection', function(socket) {
     // given an eventId, gets user location. See function defined above for format of resove
     socket.on('getLocations', function(eventId, fn) {
         getLocations(eventId)
+        .then(function(result) {
+            fn(result);
+        })
+        .catch(function(err) {
+            fn(err);
+        })
+    })
+
+    // check if user is in an event
+    socket.on('isUserInEvent', function(userId, fn) {
+        isUserInEvent(userId)
+        .then(function(result) {
+            fn(result);
+        })
+        .catch(function(err) {
+            fn(err);
+        })
+    })
+
+     // given an eventId, gets user information. See function defined above for format of resove
+     socket.on('getUsersInEvent', function(eventId, fn) {
+        getUsersInEvent(eventId)
         .then(function(result) {
             fn(result);
         })

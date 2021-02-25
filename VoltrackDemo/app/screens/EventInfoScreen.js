@@ -119,6 +119,7 @@ class EventInfoScreen extends Component {
                                                 alert("You have joined the event!");
                                                 console.log("Successfully joined!");
                                                 Actions.popTo('HomeScreen');
+                                                Actions.refresh({key: 'HomeScreen'});
                                             })
                                             .catch(function(err) {
                                                 // showMessage({
