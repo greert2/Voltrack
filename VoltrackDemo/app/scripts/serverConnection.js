@@ -119,7 +119,38 @@ export let getLocations = function(eventId) {
             });
         }
     })
-    
+}
+
+export let isUserInEvent = function(userId) {
+    return new Promise(function(resolve, reject) {
+        if(socket.connected) {
+            socket.emit('isUserInEvent', userId, function(res) {
+                if(res) {
+                    // got the event
+                    resolve(res);
+                }else {
+                    // issue when attempting to get locations
+                    reject(false);
+                }
+            });
+        }
+    })
+}
+
+export let getUsersInEvent = function(eventId) {
+    return new Promise(function(resolve, reject) {
+        if(socket.connected) {
+            socket.emit('getUsersInEvent', eventId, function(res) {
+                if(res) {
+                    // got the users
+                    resolve(res);
+                }else {
+                    // issue when attempting to get locations
+                    reject(false);
+                }
+            });
+        }
+    })
 }
 
 

@@ -3,6 +3,7 @@ import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacit
 import { LinearGradient } from 'expo-linear-gradient';
 import { Actions, Router, Scene } from "react-native-router-flux";
 import { TextInput } from 'react-native-gesture-handler';
+import { getUsersInEvent } from '../scripts/serverConnection';
 
 
 class HomeScreen extends Component {
@@ -15,7 +16,13 @@ class HomeScreen extends Component {
             username: '',
             firstName: '',
             lastName: '',
-            phone: ''
+            phone: '',
+            event: {
+                id: '',
+                name: 'no event joined :(',
+                users: []
+            },
+            inEvent: false
         }
         
     }
@@ -28,17 +35,46 @@ class HomeScreen extends Component {
         connection.getAccountInfo({username: this.props.username})
         .then(function(result) {
             // Got user account info
-            // let resultArr = result;
-            
-
-            // Update the state
             that.setState({
                  id: result.id,
                  firstName: result.firstName,
                  lastName: result.lastName,
                  phone: result.phone
             })
-            
+        })
+        .then(function() {
+            // Check if the user is in an event
+            connection.isUserInEvent(that.state.id)
+            .then(function(result) {
+                // user is in an event
+                console.log("Got user event!");
+                that.setState({
+                    event: {
+                        id: result.eventid,
+                        name: result.name
+                    }
+                })
+            })
+            .then(function() {
+                // Get the users in the event
+                connection.getUsersInEvent(that.state.event.id)
+                .then(function(result) {
+                    // got users in event
+                    that.setState({
+                        event: {
+                            ...that.state.event, // spread operator to keep what was in the object
+                            users: result
+                        },
+                        inEvent: true
+                    })
+                })
+                .catch(function(err) {
+                    console.log(err);
+                })
+            })
+            .catch(function(err) {
+                console.log(err);
+            })
         })
         .catch(function(err) {
             console.log(err);
@@ -82,12 +118,42 @@ class HomeScreen extends Component {
                     <View style={styles.textLeft}>
                         <Text style={styles.text}>Welcome {this.state.firstName}!</Text>
                     </View>
-                    <FlatList 
-                        data={people}
-                        renderItem={({ item }) => (
-                        <Text style={styles.item}>{item.name}</Text>
-                    )}
-                    />
+                    <Text style={styles.heading}>Your Event</Text>
+                    <View style={styles.listItemContainer}>
+                        <Text style={styles.eventItem}>{this.state.event.name}</Text>
+                    </View>
+                    { this.state.inEvent ? <View style={styles.fullWidth}>
+                        <Text style={styles.heading}>Volunteers</Text>
+                        <FlatList 
+                            data={this.state.event.users}
+                            renderItem={({ item }) => (
+                                <View style={styles.listItemContainer}>
+                                    <Text style={styles.volunteerName}>{item.firstname} {item.lastname}</Text>
+                                    <View style={styles.volunteerButton}>
+                                        <TouchableOpacity
+                                            style={styles.buttonTouchableOpacity}
+                                                onPress={() => {
+                                                    alert("ping this: " + item.phone) // REMOVE THIS AND REPLACE WITH ACTUAL IMPLEMENTATION
+                                                }}
+                                            >
+                                            <Text style={styles.volunteerButtonText}>📡</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={styles.volunteerButton}>
+                                        <TouchableOpacity
+                                            style={styles.buttonTouchableOpacity}
+                                                onPress={() => {
+                                                    alert("call this: " + item.phone) // REMOVE THIS AND REPLACE WITH ACTUAL IMPLEMENTATION
+                                                }}
+                                            >
+                                            <Text style={styles.volunteerButtonText}>📞</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+
+                        )}
+                        />
+                    </View> : null }
                 </View>
                 <View style={styles.buttonContainer}>
                 {/* Join Event Button */}
@@ -223,9 +289,6 @@ const styles = StyleSheet.create({
         top: 70,
         alignItems: "center",
         width: "100%",
-        // flex: 1,
-        // paddingTop: 40,
-        // paddingHorizontal: 20,
     },
     leftContainer: {
         position: 'absolute',
@@ -255,17 +318,52 @@ const styles = StyleSheet.create({
         height: 100,
         resizeMode: "contain",
     },
-    item: {
-        color: "white",
+    listItemContainer: {
         flex: 1,
-        marginHorizontal: 10,
-        marginTop: 24,
+        flexDirection: "row",
+        justifyContent: "center"
+    },
+    volunteerName: {
+        color: "black",
+        marginTop: 10,
+        width: '50%',
         padding: 30,
         backgroundColor: 'pink',
+        fontSize: 18,
+        textAlign: 'center',
+        justifyContent: "center"
+    },
+    eventItem: {
+        color: "black",
+        marginTop: 10,
+        width: '100%',
+        padding: 25,
+        backgroundColor: 'pink',
+        fontSize: 15,
+        textAlign: 'center',
+    },
+    volunteerButton: {
+        color: "white",
+        marginLeft: 4,
+        marginTop: 10,
+        width: '20%',
+        backgroundColor: 'pink',
+    },
+    volunteerButtonText: {
         fontSize: 24,
+        textAlign: 'center'
+    },
+    fullWidth: {
+        width: '100%'
     },
     textLeft: {
         textAlign: "left"
+    },
+    heading: {
+        fontSize: 24,
+        alignSelf: 'flex-start',
+        marginLeft: 10,
+        marginTop: 20
     },
     list: {
         width: "100%",
