@@ -30,9 +30,9 @@ export function checkIfEventExists(eventId) {
     }
 }
 
-export function createEvent(eventName, passcode, description, location) {
+export function createEvent(managerId, eventName, passcode, description, location) {
     if(socket.connected) {
-        socket.emit('createEvent', eventName, passcode, description, location, function(confirmation) {
+        socket.emit('createEvent', managerId, eventName, passcode, description, location, function(confirmation) {
             console.log("Event created: " + confirmation);
             if(confirmation != false) {
                 alert("Event Created!\n\nSave this information.\n Event ID: " + confirmation + "\n Passcode: " + passcode);
@@ -144,6 +144,22 @@ export let getUsersInEvent = function(eventId) {
                 if(res) {
                     // got the users
                     resolve(res);
+                }else {
+                    // issue when attempting to get locations
+                    reject(false);
+                }
+            });
+        }
+    })
+}
+
+export let leaveEvent = function(eventId, userId) {
+    return new Promise(function(resolve, reject) {
+        if(socket.connected) {
+            socket.emit('leaveEvent', eventId, userId, function(res) {
+                if(res) {
+                    // got the users
+                    resolve(true);
                 }else {
                     // issue when attempting to get locations
                     reject(false);

@@ -245,6 +245,45 @@ let getUsersInEvent = function(eventId) {
     })
 }
 
+// Used to leave an event by a user. If the user is the manager of the event, it deletes the event
+//  and removes everyone from the event as well.
+let leaveEvent = function(eventId, userId) {
+    return new Promise(function(resolve, reject) {
+        sql_connection.query('SELECT id, managerid FROM events WHERE id = ? AND managerid = ?', [eventId, userId], function(err, results) {
+            if(err) {
+                console.log("Error selecting eventid: " + eventId);
+            }else {
+                if(results.length > 0) {
+                    // The event manager is leaving the event. Delete the event.
+                    sql_connection.query('DELETE FROM events WHERE id = ?', eventId, function(err, results) {
+                        if(err) {
+                            console.log("Error deleting event with eventid: " + eventId);
+                        }else {
+                            // Remove any other volunteer that was still in the event
+                            sql_connection.query('DELETE FROM joined_events WHERE eventid = ?', eventId, function(err, results) {
+                                if(err) {
+                                    console.log("Error deleting from joined_events for eventid: " + eventId);
+                                }else {
+                                    resolve(true);
+                                }
+                            })
+                        }
+                    })
+                }else {
+                    // Not the event manager. Leave the event like normal.
+                    sql_connection.query('DELETE FROM joined_events WHERE userid = ?', [userId], function(err, results) {
+                        if(err) {
+                            console.log("Error leaving event for userid = " + userId);
+                        }else if(results) {
+                            resolve(true);
+                        }
+                    })
+                }
+            }
+        });
+    })
+}
+
 
 // Connect
 io.on('connection', function(socket) {
@@ -357,7 +396,7 @@ io.on('connection', function(socket) {
     })
 
     // Create a new event
-    socket.on('createEvent', function(eventName, passcode, description, location, fn) { 
+    socket.on('createEvent', function(managerId, eventName, passcode, description, location, fn) { 
         // Generate a Unique ID for this event
         let eventId = generateId();
 
@@ -367,7 +406,7 @@ io.on('connection', function(socket) {
             console.log("The event: " + eventId + " does not exist."); // DEBUG
 
              // Insert Event into database
-            sql_connection.query('INSERT INTO events (id, name, passcode, description, location) VALUES (?, ?, ?, ?, ?)', [eventId, eventName, passcode, description, location], function(err) {
+            sql_connection.query('INSERT INTO events (id, managerid, name, passcode, description, location) VALUES (?, ?, ?, ?, ?, ?)', [eventId, managerId, eventName, passcode, description, location], function(err) {
                 if(err) {
                     fn(false);
                     throw err;
@@ -449,6 +488,18 @@ io.on('connection', function(socket) {
             fn(err);
         })
     })
+
+    // given an eventId and userId, makes the volunteer leave the event. If they're the manager, it deletes it.
+    socket.on('leaveEvent', function(eventId, userId, fn) {
+        leaveEvent(eventId, userId)
+        .then(function(result) {
+            fn(result);
+        })
+        .catch(function(err) {
+            fn(err);
+        })
+    })
+
 
 });
 
