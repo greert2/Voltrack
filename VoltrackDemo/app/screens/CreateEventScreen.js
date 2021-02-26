@@ -89,7 +89,7 @@ class CreateEventScreen extends Component {
                             
                             // Check for user inputs
                             if(this.state.eventName != '' && this.state.passcode != '' && this.state.description != '') {
-                                Actions.SetLocationScreen({eventName: this.state.eventName, passcode: this.state.passcode, description: this.state.description});
+                                Actions.SetLocationScreen({userid: this.props.userid, eventName: this.state.eventName, passcode: this.state.passcode, description: this.state.description});
                                 // Actions.pop();
                             }else {
                                 // showToast()

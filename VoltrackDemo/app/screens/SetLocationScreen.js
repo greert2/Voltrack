@@ -49,8 +49,7 @@ class SetLocationScreen extends Component {
             return decimal.toPrecision(7);
         } 
 
-        
-        
+;
         return (
             
             <ImageBackground 
@@ -103,7 +102,7 @@ class SetLocationScreen extends Component {
                         onPress={() => {
                             // alert("Event Created!")
                             let location = correctPrecision(this.state.region.latitude) + "," + correctPrecision(this.state.region.longitude);
-                            connection.createEvent(this.props.eventName, this.props.passcode, this.props.description, location);
+                            connection.createEvent(this.props.userid, this.props.eventName, this.props.passcode, this.props.description, location);
                             Actions.popTo('HomeScreen');
                             
                             // alert("precision: " + location);

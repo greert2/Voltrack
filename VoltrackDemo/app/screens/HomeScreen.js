@@ -206,7 +206,7 @@ class HomeScreen extends Component {
                     <TouchableOpacity
                     style={styles.buttonTouchableOpacity}
                         onPress={() => {
-                            Actions.CreateEventScreen()
+                            Actions.CreateEventScreen({userid: this.state.id});
                         }}
                     >
                         <Text style={styles.btnTextWhite}>Create Event</Text>
