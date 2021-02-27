@@ -1,9 +1,11 @@
 import React, { useState, Component } from 'react';
-import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacity, FlatList} from 'react-native';
+import { ImageBackground, StyleSheet, View, Alert, Button, Image, Text, TouchableOpacity, FlatList} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Actions, Router, Scene } from "react-native-router-flux";
 import { TextInput } from 'react-native-gesture-handler';
 import { getUsersInEvent } from '../scripts/serverConnection';
+
+
 
 
 class HomeScreen extends Component {
@@ -52,8 +54,10 @@ class HomeScreen extends Component {
                 that.setState({
                     event: {
                         id: result.eventid,
-                        name: result.name
-                    }
+                        name: result.name,
+                    },
+                    var1: "Leave Event"
+
                 })
             })
             .then(function() {
@@ -82,6 +86,37 @@ class HomeScreen extends Component {
         })
     }
 
+      createTwoButtonAlert = () =>
+      Alert.alert(
+        "Leave Event",
+        "Are you sure you want to leave the event?",
+        [
+          {
+            text: "Yes",
+            onPress: () => {
+                var connection = this.props.socket;
+                var that = this;
+
+                connection.leaveEvent(this.state.event.id, this.state.id)
+                .then(function(results){
+                    that.setState({
+                        inEvent: false,
+                        event: {
+                            id: '',
+                            name: 'no event joined :(',
+                            users: []
+                        }
+                    });
+                })
+                .catch(function(err){
+                    //not success :(
+                })
+            }
+          },
+          { text: "No", onPress: () => console.log("no") }
+        ],
+        { cancelable: false }
+      );
     
 
     render() {
@@ -155,18 +190,31 @@ class HomeScreen extends Component {
                         />
                     </View> : null }
                 </View>
+                
                 <View style={styles.buttonContainer}>
+
+                { this.state.inEvent ? <View style={styles.JoinEventButton}>
+                {/* Leave Event Button */}
+                    <TouchableOpacity
+                    style={styles.buttonTouchableOpacity}
+                    onPress={this.createTwoButtonAlert}
+                    >
+                            <Text style={styles.btnTextWhite}>Leave Event</Text>
+                    </TouchableOpacity>
+                </View> : null }
+
+                { ! this.state.inEvent ? <View style={styles.JoinEventButton}>
+
                 {/* Join Event Button */}
-                <View style={styles.JoinEventButton}>
                     <TouchableOpacity
                     style={styles.buttonTouchableOpacity}
                         onPress={() => {
                             Actions.JoinEventScreen({userid: this.state.id})
                         }}
                     >
-                        <Text style={styles.btnTextWhite}>Join Event</Text>
+                            <Text style={styles.btnTextWhite}>Join Event</Text>
                     </TouchableOpacity>
-                </View>
+                </View> : null }
                  {/* Map Button */}
                 <View style={styles.JoinEventButton}>
                     <TouchableOpacity
@@ -189,24 +237,13 @@ class HomeScreen extends Component {
                         <Text style={styles.btnTextWhite}>Home</Text>
                     </TouchableOpacity>
                 </View>
-                {/* Your Events Button */}
-                <View style={styles.JoinEventButton}>
-                    <TouchableOpacity
-                        style={styles.buttonTouchableOpacity}
-                            onPress={() => {
-                                Actions.YourEventsScreen();
-                            }}
-                        >
-                        <Text style={styles.btnTextWhite}>Your Events</Text>
-                    </TouchableOpacity>
-                 </View>
 
                 {/* Create Event Button */}
-                <View style={styles.JoinEventButton}>
+                <View style={styles.CreateEventButton}>
                     <TouchableOpacity
                     style={styles.buttonTouchableOpacity}
                         onPress={() => {
-                            Actions.CreateEventScreen({userid: this.state.id});
+                            Actions.CreateEventScreen()
                         }}
                     >
                         <Text style={styles.btnTextWhite}>Create Event</Text>
@@ -248,14 +285,15 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     CreateEventButton: {
-        width: '50%',
-        height: 70,
+        width: '59%',
+        height: 120,
         backgroundColor: "rgba(0,0,0,0.3)",
         justifyContent: "center",
+        fontWeight: "bold",
         alignItems: "center",
     },
     JoinEventButton: {
-        width: '48%',
+        width: '58%',
         height: 120,
         backgroundColor: "rgba(0,0,0,0.3)",
         justifyContent: "center",
@@ -302,7 +340,7 @@ const styles = StyleSheet.create({
         bottom: 2,
         left: 0,
         flex: 1,
-        width: 179,
+        width: 184,
         height:110,
         flexDirection: 'row',
         justifyContent: 'space-between'
