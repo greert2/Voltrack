@@ -48,6 +48,7 @@ class HomeScreen extends Component {
             .then(function(result) {
                 // user is in an event
                 console.log("Got user event!");
+                
                 that.setState({
                     event: {
                         id: result.eventid,
@@ -84,7 +85,6 @@ class HomeScreen extends Component {
     
 
     render() {
-
 
         let people = [
             { name: 'Hao', key: '1'},
@@ -218,8 +218,8 @@ class HomeScreen extends Component {
                     <TouchableOpacity
                     style={styles.buttonTouchableOpacity}
                         onPress={() => {
-                            Actions.UserSettingsScreen({socket: this.props.connection, username: this.props.username, firstName: this.state.firstName, 
-                                lastName: this.state.lastName, phone: this.state.phone});
+                            Actions.UserSettingsScreen({socket: this.props.socket, id: this.state.id, username: this.props.username, firstName: this.state.firstName, 
+                                lastName: this.state.lastName, phone: this.state.phone, inEvent: this.state.inEvent, eventId: this.state.event.id});
                         }}
                     >
                     <Image style={styles.image} source={require('../assets/profilePic.png')}/>

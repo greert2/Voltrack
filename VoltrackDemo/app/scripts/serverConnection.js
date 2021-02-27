@@ -13,6 +13,10 @@ export function connect() {
     addBasicListeners();
 }
 
+export function disconnect() {
+    socket.disconnect();
+}
+
 export function getSocket() { return socket; }
 
 export function authUser(username, password, callback) {
@@ -162,6 +166,54 @@ export let leaveEvent = function(eventId, userId) {
                     resolve(true);
                 }else {
                     // issue when attempting to get locations
+                    reject(false);
+                }
+            });
+        }
+    })
+}
+
+export let setTask = function(userId, task) {
+    return new Promise(function(resolve, reject) {
+        if(socket.connected) {
+            socket.emit('setTask', userId, task, function(res) {
+                if(res) {
+                    // task was set
+                    resolve(true);
+                }else {
+                    // could not set the task
+                    reject(false);
+                }
+            });
+        }
+    })
+}
+
+export let getTask = function(userId) {
+    return new Promise(function(resolve, reject) {
+        if(socket.connected) {
+            socket.emit('getTask', userId, function(res) {
+                if(res) {
+                    // got task
+                    resolve(res);
+                }else {
+                    // could not get the task
+                    reject(false);
+                }
+            });
+        }
+    })
+}
+
+export let deleteAccount = function(userId) {
+    return new Promise(function(resolve, reject) {
+        if(socket.connected) {
+            socket.emit('deleteAccount', userId, function(res) {
+                if(res) {
+                    // deleted account
+                    resolve(res);
+                }else {
+                    // could not delete account
                     reject(false);
                 }
             });
