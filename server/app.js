@@ -284,6 +284,73 @@ let leaveEvent = function(eventId, userId) {
     })
 }
 
+// This sets a volunteer's task in an event. This should only be called after the user has
+//  joined an event. The database supports up to 50 characters for the task.
+let setTask = function(userId, task) {
+    return new Promise(function(resolve, reject) {
+        sql_connection.query('UPDATE joined_events SET task = ? WHERE userid = ?', [task, userId], function(err, results) {
+            if(err) {
+                console.log("Error updating task for userId: " + userId);
+            }else {
+                if(results.changedRows > 0) {
+                    resolve(true);
+                }else {
+                    reject(err);
+                }
+            }
+        });
+    })
+}
+
+// Used to get the task of a specific user. Useful to show the user their own current task.
+let getTask = function(userId) {
+    return new Promise(function(resolve, reject) {
+        sql_connection.query('SELECT task FROM joined_events WHERE userid = ?', userId, function(err, results) {
+            if(err) {
+                console.log("Error selecting task for userId: " + userId);
+            }else {
+                if(results.length > 0) {
+                    resolve(results[0].task);
+                }else {
+                    reject(err);
+                }
+            }
+        });
+    })
+}
+
+// This sets a volunteer's locatiion in an event. This should only be called after the user has
+//  joined an event.
+let updateLocation = function(userId, location) {
+    return new Promise(function(resolve, reject) {
+        sql_connection.query('UPDATE joined_events SET location = ? WHERE userid = ?', [location, userId], function(err, results) {
+            if(err) {
+                console.log("Error updating location for userId: " + userId);
+            }else {
+                if(results.changedRows > 0) {
+                    resolve(true);
+                }else {
+                    reject(err);
+                }
+            }
+        });
+    })
+}
+
+// Given a userId and the inEvent variable, this deletes a user's account
+//  If the user is in an event at the time of deletion, this should be invoked after leaveEvent.
+let deleteAccount = function(userId) {
+    return new Promise(function(resolve, reject) {
+        sql_connection.query('DELETE FROM users WHERE id = ?', userId, function(err, results) {
+            if(err) {
+                console.log("Error deleting user for userId: " + userId);
+                reject(err);
+            }else {
+                resolve(true)
+            }
+        });
+    })
+}
 
 // Connect
 io.on('connection', function(socket) {
@@ -450,9 +517,12 @@ io.on('connection', function(socket) {
 
     // given a userId and a location string, updates it in the database
     socket.on('updateLocation', function(userId, location, fn) {
-        sql_connection.query('UPDATE joined_events SET location = ? WHERE userid = ?', [location, userId], function(err, result) {
-            if(err) throw err;
-            console.log("Updated location in db!");
+        updateLocation(userId, location)
+        .then(function(result) {
+            fn(result);
+        })
+        .catch(function(err) {
+            fn(err);
         })
     })
 
@@ -500,6 +570,39 @@ io.on('connection', function(socket) {
         })
     })
 
+    // given a userId and a task string, sets the users task status in the database.
+    socket.on('setTask', function(userId, task, fn) {
+        setTask(userId, task)
+        .then(function(result) {
+            fn(result);
+        })
+        .catch(function(err) {
+            fn(err);
+        })
+    })
+
+    // given a userId and a task string, sets the users task status in the database.
+    socket.on('getTask', function(userId, fn) {
+        getTask(userId)
+        .then(function(result) {
+            fn(result);
+        })
+        .catch(function(err) {
+            fn(err);
+        })
+    })
+
+    // given a userId, deletes the users account. Should be called after leaveEvent if they're in an event.
+    socket.on('deleteAccount', function(userId, fn) {
+        deleteAccount(userId)
+        .then(function(result) {
+            fn(result);
+        })
+        .catch(function(err) {
+            fn(err);
+        })
+    })
+    
 
 });
 

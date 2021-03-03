@@ -51,18 +51,6 @@ const MainScreen = () => {
                 <Text style={styles.btnTextWhite}>Register</Text>
                 </TouchableOpacity>
             </View>
-
-            {/* Map Button */}
-            <View style={styles.mapButton}>
-                <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                    onPress={() => {
-                        Actions.MapScreen()
-                    }}
-                >
-                    <Text style={styles.btnTextWhite}>Map</Text>
-                </TouchableOpacity>
-            </View>
         </ImageBackground>
         
     );
