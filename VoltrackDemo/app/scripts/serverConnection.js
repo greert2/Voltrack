@@ -103,10 +103,20 @@ export let doJoinEvent = function(userId, eventId, location) {
     
 }
 
-export function updateLocation(userId, location) {
-    if(socket.connected) {
-        socket.emit('updateLocation', [userId, location]);
-    }
+export let updateLocation = function(userId, location) {
+    return new Promise(function(resolve, reject) {
+        if(socket.connected) {
+            socket.emit('updateLocation', userId, location, function(res) {
+                if(res) {
+                    // location was set
+                    resolve(true);
+                }else {
+                    // could not set the task
+                    reject(false);
+                }
+            });
+        }
+    })
 }
 
 export let getLocations = function(eventId) {

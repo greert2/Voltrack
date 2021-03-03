@@ -216,16 +216,16 @@ class HomeScreen extends Component {
                     </TouchableOpacity>
                 </View> : null }
                  {/* Map Button */}
-                <View style={styles.JoinEventButton}>
+                 { this.state.inEvent ? <View style={styles.JoinEventButton}>
                     <TouchableOpacity
                         style={styles.buttonTouchableOpacity}
                             onPress={() => {
-                                Actions.MapScreen({firstName: this.state.firstName, lastName: this.state.lastName});
+                                Actions.MapScreen({socket: this.props.socket, userid: this.state.id, eventid: this.state.event.id, firstName: this.state.firstName, lastName: this.state.lastName});
                             }}
                         >
                         <Text style={styles.btnTextWhite}>Map</Text>
                     </TouchableOpacity>
-                 </View>
+                 </View> : null }
                 {/* Home Button */}
                 <View style={styles.JoinEventButton}>
                     <TouchableOpacity
@@ -243,7 +243,7 @@ class HomeScreen extends Component {
                     <TouchableOpacity
                     style={styles.buttonTouchableOpacity}
                         onPress={() => {
-                            Actions.CreateEventScreen()
+                            Actions.CreateEventScreen({userid: this.state.id});
                         }}
                     >
                         <Text style={styles.btnTextWhite}>Create Event</Text>

@@ -319,6 +319,24 @@ let getTask = function(userId) {
     })
 }
 
+// This sets a volunteer's locatiion in an event. This should only be called after the user has
+//  joined an event.
+let updateLocation = function(userId, location) {
+    return new Promise(function(resolve, reject) {
+        sql_connection.query('UPDATE joined_events SET location = ? WHERE userid = ?', [location, userId], function(err, results) {
+            if(err) {
+                console.log("Error updating location for userId: " + userId);
+            }else {
+                if(results.changedRows > 0) {
+                    resolve(true);
+                }else {
+                    reject(err);
+                }
+            }
+        });
+    })
+}
+
 // Given a userId and the inEvent variable, this deletes a user's account
 //  If the user is in an event at the time of deletion, this should be invoked after leaveEvent.
 let deleteAccount = function(userId) {
@@ -499,9 +517,12 @@ io.on('connection', function(socket) {
 
     // given a userId and a location string, updates it in the database
     socket.on('updateLocation', function(userId, location, fn) {
-        sql_connection.query('UPDATE joined_events SET location = ? WHERE userid = ?', [location, userId], function(err, result) {
-            if(err) throw err;
-            console.log("Updated location in db!");
+        updateLocation(userId, location)
+        .then(function(result) {
+            fn(result);
+        })
+        .catch(function(err) {
+            fn(err);
         })
     })
 
