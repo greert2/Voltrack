@@ -1,8 +1,9 @@
 import React, { useState, Component } from 'react';
-import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacity, ToastAndroid} from 'react-native';
+import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacity, KeyboardAvoidingView} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Actions, Router, Scene } from "react-native-router-flux";
 import { TextInput } from 'react-native-gesture-handler';
+import global from './Globals';
 // import Toast from 'react-native-simple-toast';
 
 // TODO: this login system is not secure despite hashing passwords before sending. We need to add a layer of device authentication or use something else like key pairs
@@ -16,6 +17,7 @@ class RegisterScreen extends Component {
         username: '',
         password: '',
     }
+
 
     render() {
         var bcrypt = require("react-native-bcrypt"); // for hashing passwords
@@ -39,19 +41,27 @@ class RegisterScreen extends Component {
                     height: '100%',
                     }}
                 />
-                <View style={styles.container}>
+                <KeyboardAvoidingView 
+                    style={styles.container}
+                    behavior="padding"
+                >
                     <Image style={styles.image} source={require('../assets/voltrackLogo.png')}/>
                     <Text style={styles.logo}>Register</Text>
                     <View style={styles.mainPanel}>
-                        {/* Username Textbox */}
+                        {/* First Name Textbox */}
                         <TextInput
                             style={styles.inputBox}
                             placeholder="First Name"
                             placeholderTextColor={'black'}
                             onChangeText={(firstName) => this.setState({firstName})}
                             value={this.state.firstName}
+                            maxLength={30}
+                            onEndEditing={(e)=>handleValidFirstName(e.nativeEvent.text)}
                         />
-                        {/* Password Textbox */}
+                        {global.isValidFirstName ? null :
+                        <Text style={styles.errorMsg}>First Name field must only contain letters</Text>
+                        }
+                        {/* Last Name Textbox */}
                         <TextInput
                             style={styles.inputBox}
                             placeholder="Last Name"
@@ -59,7 +69,13 @@ class RegisterScreen extends Component {
                             secureTextEntry={false}
                             onChangeText={(lastName) => this.setState({lastName})}
                             value={this.state.lastName}
+                            maxLength={30}
+                            onEndEditing={(e)=>handleValidLastName(e.nativeEvent.text)}
                         />
+                        {global.isValidLastName ? null :
+                        <Text style={styles.errorMsg}>Last Name field must only contain letters</Text>
+                        }
+                        {/* Mobile Number Textbox */}
                         <TextInput
                             style={styles.inputBox}
                             placeholder="Mobile Number"
@@ -67,7 +83,14 @@ class RegisterScreen extends Component {
                             secureTextEntry={false}
                             onChangeText={(phone) => this.setState({phone})}
                             value={this.state.phone}
+                            keyboardType="phone-pad"
+                            maxLength={12}
+                            onEndEditing={(e)=>handleValidMobileNumber(e.nativeEvent.text)}
                         />
+                        {global.isValidMobileNumber ? null :
+                        <Text style={styles.errorMsg}>Mobile Number field must only contain digits</Text>
+                        }
+                        {/* Email Textbox */}
                         <TextInput
                             style={styles.inputBox}
                             placeholder="Email"
@@ -76,8 +99,15 @@ class RegisterScreen extends Component {
                             autoCapitalize={"none"}
                             onChangeText={(email) => this.setState({email})}
                             value={this.state.email}
+                            keyboardType="email-address"
+                            maxLength={40}
+                            onEndEditing={(e)=>handleValidEmail(e.nativeEvent.text)}
                         />
-                            <TextInput
+                        {global.isValidEmail ? null :
+                        <Text style={styles.errorMsg}>Enter in form 'JohnDoe@gmail.com'</Text>
+                        }
+                        {/* Username Textbox */}
+                        <TextInput
                             style={styles.inputBox}
                             placeholder="Username"
                             placeholderTextColor={'black'}
@@ -85,8 +115,14 @@ class RegisterScreen extends Component {
                             autoCapitalize={"none"}
                             onChangeText={(username) => this.setState({username})}
                             value={this.state.username}
+                            maxLength={16}
+                            onEndEditing={(e)=>handleValidUsername(e.nativeEvent.text)}
                         />
-                                            <TextInput
+                        {global.isValidUsername ? null :
+                        <Text style={styles.errorMsg}>Username must only contain letters and digits</Text>
+                        }
+                        {/* Password Textbox */}
+                        <TextInput
                             style={styles.inputBox}
                             placeholder="Password"
                             placeholderTextColor={'black'}
@@ -94,9 +130,14 @@ class RegisterScreen extends Component {
                             autoCapitalize={"none"}
                             onChangeText={(password) => this.setState({password})}
                             value={this.state.password}
+                            maxLength={60}
+                            onEndEditing={(e)=>handleValidPassword(e.nativeEvent.text)}
                         />
+                        {global.isValidPassword ? null :
+                        <Text style={styles.errorMsg}>Password field must not have contain white space</Text>
+                        }
                     </View>
-                </View>
+                </KeyboardAvoidingView>
                 {/* Register Button */}
                 <View style={styles.registerButton}>
                     <TouchableOpacity
@@ -129,15 +170,71 @@ class RegisterScreen extends Component {
     }
 }
 
-// const showToast = () => (
-//     Toast.showWithGravity(
-//         "Register!", 
-//         Toast.SHORT, 
-//         Toast.TOP,
-//     )
-// )
+const onlyNumbersANDLetters = /^[0-9a-zA-Z]+$/;
+const onlyNumbers = /^[0-9]+$/;
+const onlyLetters = /^[a-zA-Z]+$/;
+const hasWhiteSpace = /\s/;
+
+const handleValidFirstName = (val) => {
+    if(onlyLetters.test(val)) {
+       global.isValidFirstName = true;
+    }
+    else {
+        global.isValidFirstName = false;
+    }
+}
+
+const handleValidLastName = (val) => {
+    if(onlyLetters.test(val)) {
+       global.isValidLastName = true;
+    }
+    else {
+        global.isValidLastName = false;
+    }
+}
+
+const handleValidMobileNumber = (val) => {
+    if(onlyNumbers.test(val)) {
+       global.isValidMobileNumber = true;
+    }
+    else {
+        global.isValidMobileNumber= false;
+    }
+}
+
+const handleValidUsername = (val) => {
+    if(onlyNumbersANDLetters.test(val)) {
+       global.isValidUsername = true;
+    }
+    else {
+        global.isValidUsername = false;
+    }
+}
+
+const handleValidEmail = (val) => {
+    if(hasWhiteSpace.test(val)) {
+       global.isValidEmail = true;
+    }
+    else {
+        global.isValidEmail= false;
+    }
+}
+
+const handleValidPassword = (val) => {
+    if(hasWhiteSpace.test(val)) {
+       global.isValidPassword = true;
+    }
+    else {
+        global.isValidPassword= false;
+    }
+}
+
 
 const styles = StyleSheet.create({
+    errorMsg: {
+        color: '#FF0000',
+        fontSize: 14,
+    },
     background: {
         flex: 1,
         justifyContent: "flex-end",
@@ -153,14 +250,14 @@ const styles = StyleSheet.create({
     },
     registerButton: {
         width: '100%',
-        height: 70,
+        height: 60,
         backgroundColor: "rgba(0,0,0,0.3)",
         alignItems: "center",
         justifyContent: "center",
     },
     backButton: {
         width: "100%",
-        height: 80,
+        height: 60,
         backgroundColor: "rgba(0,0,0,0.5)",
         justifyContent: "center",
         alignItems: "center",
