@@ -104,7 +104,7 @@ class RegisterScreen extends Component {
                             onEndEditing={(e)=>handleValidEmail(e.nativeEvent.text)}
                         />
                         {global.isValidEmail ? null :
-                        <Text style={styles.errorMsg}>Enter in form 'JohnDoe@gmail.com'</Text>
+                        <Text style={styles.errorMsg}>You have entered an invalid email address</Text>
                         }
                         {/* Username Textbox */}
                         <TextInput
@@ -174,6 +174,7 @@ const onlyNumbersANDLetters = /^[0-9a-zA-Z]+$/;
 const onlyNumbers = /^[0-9]+$/;
 const onlyLetters = /^[a-zA-Z]+$/;
 const hasWhiteSpace = /\s/;
+const emailCheck = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 
 const handleValidFirstName = (val) => {
     if(onlyLetters.test(val)) {
@@ -212,7 +213,7 @@ const handleValidUsername = (val) => {
 }
 
 const handleValidEmail = (val) => {
-    if(hasWhiteSpace.test(val)) {
+    if(emailCheck.test(val)) {
        global.isValidEmail = true;
     }
     else {
