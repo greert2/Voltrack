@@ -2,6 +2,7 @@ import React, { useState, Component } from 'react';
 import { ImageBackground, StyleSheet, View, Alert, Button, Image, Text, TouchableOpacity, FlatList} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Actions, Router, Scene } from "react-native-router-flux";
+import Communications from 'react-native-communications';
 import { TextInput } from 'react-native-gesture-handler';
 import { getUsersInEvent } from '../scripts/serverConnection';
 
@@ -24,7 +25,8 @@ class HomeScreen extends Component {
                 name: 'no event joined :(',
                 users: []
             },
-            inEvent: false
+            inEvent: false,
+            textTo: ""
         }
         
     }
@@ -41,7 +43,9 @@ class HomeScreen extends Component {
                  id: result.id,
                  firstName: result.firstName,
                  lastName: result.lastName,
-                 phone: result.phone
+                 phone: result.phone,
+                 textTo: result.firstName + " is pinging you from Voltrack, contact them as soon as you can!"
+
             })
         })
         .then(function() {
@@ -168,7 +172,7 @@ class HomeScreen extends Component {
                                         <TouchableOpacity
                                             style={styles.buttonTouchableOpacity}
                                                 onPress={() => {
-                                                    alert("ping this: " + item.phone) // REMOVE THIS AND REPLACE WITH ACTUAL IMPLEMENTATION
+                                                    Communications.text(item.phone, this.state.textTo) ////////////////////////////////////
                                                 }}
                                             >
                                             <Text style={styles.volunteerButtonText}>📡</Text>
@@ -178,7 +182,7 @@ class HomeScreen extends Component {
                                         <TouchableOpacity
                                             style={styles.buttonTouchableOpacity}
                                                 onPress={() => {
-                                                    alert("call this: " + item.phone) // REMOVE THIS AND REPLACE WITH ACTUAL IMPLEMENTATION
+                                                    Communications.phonecall(item.phone, true)
                                                 }}
                                             >
                                             <Text style={styles.volunteerButtonText}>📞</Text>
@@ -226,8 +230,8 @@ class HomeScreen extends Component {
                         <Text style={styles.btnTextWhite}>Map</Text>
                     </TouchableOpacity>
                  </View> : null }
-                {/* Home Button */}
-                <View style={styles.JoinEventButton}>
+                {/* Home Button in event*/}
+                { this.state.inEvent ? <View style={styles.JoinEventButton}>
                     <TouchableOpacity
                     style={styles.buttonTouchableOpacity}
                         onPress={() => {
@@ -236,10 +240,25 @@ class HomeScreen extends Component {
                     >
                         <Text style={styles.btnTextWhite}>Home</Text>
                     </TouchableOpacity>
-                </View>
+                </View>: null }
 
-                {/* Create Event Button */}
-                <View style={styles.CreateEventButton}>
+
+
+
+                {/* Home Button not in event */}
+                { ! this.state.inEvent ? <View style={styles.JoinEventButton2}>
+                    <TouchableOpacity
+                    style={styles.buttonTouchableOpacity}
+                        onPress={() => {
+                            
+                        }}
+                    >
+                        <Text style={styles.btnTextWhite}>Home</Text>
+                    </TouchableOpacity>
+                </View>: null }
+
+                {/* Create Event Button not in event*/}
+                { ! this.state.inEvent ? <View style={styles.CreateEventButton2}>
                     <TouchableOpacity
                     style={styles.buttonTouchableOpacity}
                         onPress={() => {
@@ -248,7 +267,7 @@ class HomeScreen extends Component {
                     >
                         <Text style={styles.btnTextWhite}>Create Event</Text>
                     </TouchableOpacity>
-                </View>
+                </View>: null }
                 </View> 
                 {/* User Settings Button */}
                 <View style={styles.profileButton}>
@@ -293,7 +312,23 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     JoinEventButton: {
-        width: '58%',
+        width: '81%',
+        height: 120,
+        backgroundColor: "rgba(0,0,0,0.3)",
+        justifyContent: "center",
+        fontWeight: "bold",
+        alignItems: "center",
+    },
+    JoinEventButton2: {
+        width: '76%',
+        height: 120,
+        backgroundColor: "rgba(0,0,0,0.3)",
+        justifyContent: "center",
+        fontWeight: "bold",
+        alignItems: "center",
+    },
+    CreateEventButton2: {
+        width: '81%',
         height: 120,
         backgroundColor: "rgba(0,0,0,0.3)",
         justifyContent: "center",
