@@ -14,12 +14,16 @@
     "expo": "~39.0.2",
     "expo-linear-gradient": "~8.3.0",
     "expo-location": "~9.0.0",
+    "expo-notifications": "~0.7.2",
+    "expo-permissions": "~9.3.0",
     "expo-status-bar": "~1.0.2",
+    "expo-task-manager": "~8.5.0",
     "haversine": "^1.1.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.3.tar.gz",
     "react-native-bcrypt": "^2.4.0",
+    "react-native-communications": "^2.2.1",
     "react-native-flash-message": "^0.1.22",
     "react-native-gesture-handler": "^1.7.0",
     "react-native-maps": "^0.27.1",
@@ -37,10 +41,7 @@
     "socket.io-client": "^2.1.1",
     "stream-browserify": "^1.0.0",
     "styled-components": "^5.2.1",
-    "styled-system": "^5.1.5",
-    "expo-task-manager": "~8.5.0",
-    "expo-permissions": "~9.3.0",
-    "expo-notifications": "~0.7.2"
+    "styled-system": "^5.1.5"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

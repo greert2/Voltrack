@@ -337,6 +337,32 @@ let updateLocation = function(userId, location) {
     })
 }
 
+let accountRegister = function(firstName, lastName, phone, email, username, password) {
+    return new Promise(function(resolve, reject) {
+        console.log(firstName + "," + lastName + "," + phone + "," + email + "," + username + "," + password);
+        accountExists(username)
+        .then(function(result) {
+            // User does not exist, proceed with registration
+            //console.log("result: " + result);
+            if(firstName == '' || lastName == '' || phone == '' || email == '' || username == '' || password == '') {
+                console.log("Registration: A field was empty. No user account created.");
+            }else {
+                sql_connection.query('INSERT INTO users (firstName, lastName, phone, email, username, password) VALUES (?, ?, ?, ?, ?, ?)', [firstName, lastName, phone, email, username, password], function(err, result) {
+                    if(err) throw err;
+                    console.log("Inserted into db!");
+                    resolve(true);
+                })
+            }
+            
+        })
+        .catch(function(err) {
+            // User already exists
+            console.log("ERR: " + err);
+            reject(err);
+        })
+    })
+}
+
 // Given a userId and the inEvent variable, this deletes a user's account
 //  If the user is in an event at the time of deletion, this should be invoked after leaveEvent.
 let deleteAccount = function(userId) {
@@ -404,25 +430,15 @@ io.on('connection', function(socket) {
     });
 
     // Attempt to register an account
-    socket.on('account_register', (firstName, lastName, phone, email, username, password) => {
-        console.log(firstName + "," + lastName + "," + phone + "," + email + "," + username + "," + password);
-        accountExists(username)
+    socket.on('account_register', function(firstName, lastName, phone, email, username, password, res) {
+        
+        accountRegister(firstName, lastName, phone, email, username, password)
         .then(function(result) {
-            // User does not exist, proceed with registration
-            //console.log("result: " + result);
-            if(firstName == '' || lastName == '' || phone == '' || email == '' || username == '' || password == '') {
-                console.log("Registration: A field was empty. No user account created.");
-            }else {
-                sql_connection.query('INSERT INTO users (firstName, lastName, phone, email, username, password) VALUES (?, ?, ?, ?, ?, ?)', [firstName, lastName, phone, email, username, password], function(err, result) {
-                    if(err) throw err;
-                    console.log("Inserted into db!");
-                })
-            }
-            
+            // Account successfully registered!
+            res(result);
         })
         .catch(function(err) {
-            // User already exists
-            console.log("ERR: " + err);
+            res(err);
         })
 
         

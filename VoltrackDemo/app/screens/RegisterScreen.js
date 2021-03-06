@@ -147,7 +147,17 @@ class RegisterScreen extends Component {
                             // Hash password before sending
                             var salt = bcrypt.genSaltSync(10);
                             var hashedPass = bcrypt.hashSync(this.state.password, salt);
-                            connection.getSocket().emit('account_register', this.state.firstName, this.state.lastName, this.state.phone, this.state.email, this.state.username, hashedPass);
+                            //connection.getSocket().emit('account_register', this.state.firstName, this.state.lastName, this.state.phone, this.state.email, this.state.username, hashedPass)
+                            connection.accountRegister(this.state.firstName, this.state.lastName, this.state.phone, this.state.email, this.state.username, hashedPass)
+                            .then(function(res) {
+                                // successfully registered account
+                                alert("Successfully registered account!");
+                                Actions.pop();
+                            })
+                            .catch(function(err) {
+                                alert("Failed to register account!");
+                                Actions.pop();
+                            })
                         }}
                     >
                         <Text style={styles.btnTextWhite}>Register</Text>
