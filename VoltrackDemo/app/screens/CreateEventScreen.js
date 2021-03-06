@@ -3,7 +3,7 @@ import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacit
 import { LinearGradient } from 'expo-linear-gradient';
 import { Actions, Router, Scene } from "react-native-router-flux";
 import { TextInput } from 'react-native-gesture-handler';
-// import Toast from 'react-native-simple-toast';
+import global from './Globals';
 
 
 class CreateEventScreen extends Component {
@@ -61,20 +61,32 @@ class CreateEventScreen extends Component {
                             placeholder="Event Name"
                             placeholderTextColor={'black'}
                             onChangeText={(eventName) => this.setState({eventName})}
+                            maxLength={30}
+                            onEndEditing={(e)=>handleValidEventName(e.nativeEvent.text)}
                         />
-                        {/* Password Textbox */}
+                        {global.isValidEventName ? null :
+                        <Text style={styles.errorMsg}>You have entered an invalid Event Name</Text>
+                        }
+                        {/* Passcode Textbox */}
                         <TextInput
                             style={styles.inputBox}
                             placeholder="Passcode"
                             placeholderTextColor={'black'}
                             secureTextEntry={true}
                             onChangeText={(passcode) => this.setState({passcode})}
+                            maxLength={30}
+                            onEndEditing={(e)=>handleValidPasscode(e.nativeEvent.text)}
                         />
+                        {global.isValidPasscode? null :
+                        <Text style={styles.errorMsg}>You have entered an invalid Event Name</Text>
+                        }
+                        {/* Event Description Textbox */}
                         <TextInput
                             style={styles.inputBox_eventDescription}
-                            placeholder="Event Description "
+                            placeholder="Event Description"
                             placeholderTextColor={'black'}
                             onChangeText={(description) => this.setState({description})}
+                            maxLength={280}
                         />
                     </View>
                 </View>
@@ -92,7 +104,6 @@ class CreateEventScreen extends Component {
                                 Actions.SetLocationScreen({userid: this.props.userid, eventName: this.state.eventName, passcode: this.state.passcode, description: this.state.description});
                                 // Actions.pop();
                             }else {
-                                // showToast()
                             }                           
                         }}
                     >
@@ -104,15 +115,32 @@ class CreateEventScreen extends Component {
     }
 }
 
-// const showToast = () => (
-//     Toast.showWithGravity(
-//         "Event Created!", 
-//         Toast.SHORT, 
-//         Toast.TOP,
-//     )
-// )
+const onlyNumbersANDLetters = /^[0-9a-zA-Z]+$/;
+const hasWhiteSpace = /\s/;
+
+const handleValidEventName = (val) => {
+    if(onlyNumbersANDLetters.test(val)) {
+       global.isValidEventName = true;
+    }
+    else {
+        global.isValidEventName= false;
+    }
+}
+
+const handleValidPasscode = (val) => {
+    if(hasWhiteSpace.test(val)) {
+       global.isValidPasscode = true;
+    }
+    else {
+        global.isValidPasscode= false;
+    }
+}
 
 const styles = StyleSheet.create({
+    errorMsg: {
+        color: '#FF0000',
+        fontSize: 14,
+    },
     background: {
         flex: 1,
         justifyContent: "flex-end",

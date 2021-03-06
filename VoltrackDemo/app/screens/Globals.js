@@ -5,4 +5,6 @@ module.exports = {
     isValidEmail: true,
     isValidUsername: true,
     isValidPassword: true,
+    isValidEventName: true,
+    isValidPasscode: true,
 };

@@ -60,6 +60,8 @@ class JoinEventScreen extends Component {
                             placeholderTextColor={'black'}
                             secureTextEntry={false}
                             onChangeText={(eventid) => this.setState({ eventid })}
+                            keyboardType="number-pad"
+                            maxLength={9}
                         />
                         {/* Passcode Textbox */}
                         <TextInput
@@ -68,6 +70,7 @@ class JoinEventScreen extends Component {
                             placeholderTextColor={'black'}
                             secureTextEntry={true}
                             onChangeText={(passcode) => this.setState({ passcode })}
+                            maxLength={30}
                         />
                     </View>
                 </View>
