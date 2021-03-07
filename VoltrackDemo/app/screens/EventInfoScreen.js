@@ -362,7 +362,7 @@ const styles = StyleSheet.create({
 
     },
     mainPanel: {
-        marginTop: 20,
+        marginTop: 57,
         alignItems: "center",
         justifyContent: "center",
         width: "100%"
