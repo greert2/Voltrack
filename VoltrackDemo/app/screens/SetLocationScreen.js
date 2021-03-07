@@ -101,12 +101,26 @@ class SetLocationScreen extends Component {
                     style={styles.buttonTouchableOpacity}
                         onPress={() => {
                             // alert("Event Created!")
+                            let that = this;
                             let location = correctPrecision(this.state.region.latitude) + "," + correctPrecision(this.state.region.longitude);
-                            connection.createEvent(this.props.userid, this.props.eventName, this.props.passcode, this.props.description, location);
-                            Actions.popTo('HomeScreen');
-                            
-                            // alert("precision: " + location);
-
+                            connection.createEvent(this.props.userid, this.props.eventName, this.props.passcode, this.props.description, location)
+                            .then(function(res) {
+                                if(res !== false) {
+                                    connection.doJoinEvent(that.props.userid, res, '0,0')
+                                    .then(function(result) {
+                                        console.log("Successfully joined!");
+                                        Actions.popTo('HomeScreen');
+                                        Actions.refresh({key: 'HomeScreen'});
+                                    })
+                                    .catch(function(err) {
+                                        console.log("Could not join event.");
+                                        Actions.popTo('HomeScreen');
+                                    })
+                                }
+                            })
+                            .catch(function(err) {
+                                // could not create event/join
+                            })
                         }}
                     >
                         <Text style={styles.btnTextWhite}>Create Event</Text>

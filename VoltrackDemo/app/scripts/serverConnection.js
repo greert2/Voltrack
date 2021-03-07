@@ -35,17 +35,21 @@ export function checkIfEventExists(eventId) {
 }
 
 export function createEvent(managerId, eventName, passcode, description, location) {
-    if(socket.connected) {
-        socket.emit('createEvent', managerId, eventName, passcode, description, location, function(confirmation) {
-            console.log("Event created: " + confirmation);
-            if(confirmation != false) {
-                alert("Event Created!\n\nSave this information.\n Event ID: " + confirmation + "\n Passcode: " + passcode);
-            }else {
-                alert("Please try again later.");
-            }
-            
-        });
-    }
+    return new Promise(function(resolve, reject) {
+        if(socket.connected) {
+            socket.emit('createEvent', managerId, eventName, passcode, description, location, function(confirmation) {
+                console.log("Event created: " + confirmation);
+                if(confirmation != false) {
+                    alert("Event Created!\n\nSave this information.\n Event ID: " + confirmation + "\n Passcode: " + passcode);
+                    resolve(confirmation);
+                }else {
+                    alert("Please try again later.");
+                    reject(confirmation);
+                }
+                
+            })
+        }
+    })
 }
 
 
@@ -209,6 +213,22 @@ export let getTask = function(userId) {
                 }else {
                     // could not get the task
                     reject(false);
+                }
+            });
+        }
+    })
+}
+
+export let accountRegister = function(firstName, lastName, phone, email, username, password) {
+    return new Promise(function(resolve, reject) {
+        if(socket.connected) {
+            socket.emit('account_register', firstName, lastName, phone, email, username, password, function(res) {
+                if(res == true) {
+                    // account registered
+                    resolve(res);
+                }else {
+                    // could not register
+                    reject(res);
                 }
             });
         }

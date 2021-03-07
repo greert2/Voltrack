@@ -196,79 +196,77 @@ class HomeScreen extends Component {
                 </View>
                 
                 <View style={styles.buttonContainer}>
+                    { this.state.inEvent ? <View style={styles.BarButton}>
+                    {/* Leave Event Button */}
+                        <TouchableOpacity
+                        style={styles.buttonTouchableOpacity}
+                        onPress={this.createTwoButtonAlert}
+                        >
+                                <Text style={styles.btnTextWhite}>Leave Event</Text>
+                        </TouchableOpacity>
+                    </View> : null }
 
-                { this.state.inEvent ? <View style={styles.JoinEventButton}>
-                {/* Leave Event Button */}
-                    <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                    onPress={this.createTwoButtonAlert}
-                    >
-                            <Text style={styles.btnTextWhite}>Leave Event</Text>
-                    </TouchableOpacity>
-                </View> : null }
+                    { ! this.state.inEvent ? <View style={styles.BarButton}>
 
-                { ! this.state.inEvent ? <View style={styles.JoinEventButton}>
-
-                {/* Join Event Button */}
-                    <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                        onPress={() => {
-                            Actions.JoinEventScreen({userid: this.state.id})
-                        }}
-                    >
-                            <Text style={styles.btnTextWhite}>Join Event</Text>
-                    </TouchableOpacity>
-                </View> : null }
-                 {/* Map Button */}
-                 { this.state.inEvent ? <View style={styles.JoinEventButton}>
-                    <TouchableOpacity
+                    {/* Join Event Button */}
+                        <TouchableOpacity
                         style={styles.buttonTouchableOpacity}
                             onPress={() => {
-                                Actions.MapScreen({socket: this.props.socket, userid: this.state.id, eventid: this.state.event.id, firstName: this.state.firstName, lastName: this.state.lastName});
+                                Actions.JoinEventScreen({userid: this.state.id})
                             }}
                         >
-                        <Text style={styles.btnTextWhite}>Map</Text>
-                    </TouchableOpacity>
-                 </View> : null }
-                {/* Home Button in event*/}
-                { this.state.inEvent ? <View style={styles.JoinEventButton}>
-                    <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                        onPress={() => {
-                            
-                        }}
-                    >
-                        <Text style={styles.btnTextWhite}>Home</Text>
-                    </TouchableOpacity>
-                </View>: null }
+                                <Text style={styles.btnTextWhite}>Join Event</Text>
+                        </TouchableOpacity>
+                    </View> : null }
+                    {/* Map Button */}
+                    { this.state.inEvent ? <View style={styles.BarButton}>
+                        <TouchableOpacity
+                            style={styles.buttonTouchableOpacity}
+                                onPress={() => {
+                                    Actions.MapScreen({socket: this.props.socket, userid: this.state.id, eventid: this.state.event.id, firstName: this.state.firstName, lastName: this.state.lastName});
+                                }}
+                            >
+                            <Text style={styles.btnTextWhite}>Map</Text>
+                        </TouchableOpacity>
+                    </View> : null }
+                    {/* Home Button in event*/}
+                    { this.state.inEvent ? <View style={styles.BarButton}>
+                        <TouchableOpacity
+                        style={styles.buttonTouchableOpacity}
+                            onPress={() => {
+                                
+                            }}
+                        >
+                            <Text style={styles.btnTextWhite}>Home</Text>
+                        </TouchableOpacity>
+                    </View>: null }
+                    {/* Home Button not in event */}
+                    { ! this.state.inEvent ? <View style={styles.BarButton}>
+                        <TouchableOpacity
+                        style={styles.buttonTouchableOpacity}
+                            onPress={() => {
+                                
+                            }}
+                        >
+                            <Text style={styles.btnTextWhite}>Home</Text>
+                        </TouchableOpacity>
+                    </View>: null }
 
-
-
-
-                {/* Home Button not in event */}
-                { ! this.state.inEvent ? <View style={styles.JoinEventButton2}>
-                    <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                        onPress={() => {
-                            
-                        }}
-                    >
-                        <Text style={styles.btnTextWhite}>Home</Text>
-                    </TouchableOpacity>
-                </View>: null }
-
-                {/* Create Event Button not in event*/}
-                { ! this.state.inEvent ? <View style={styles.CreateEventButton2}>
-                    <TouchableOpacity
-                    style={styles.buttonTouchableOpacity}
-                        onPress={() => {
-                            Actions.CreateEventScreen({userid: this.state.id});
-                        }}
-                    >
-                        <Text style={styles.btnTextWhite}>Create Event</Text>
-                    </TouchableOpacity>
-                </View>: null }
+                    {/* Create Event Button not in event*/}
+                    { ! this.state.inEvent ? <View style={styles.BarButton}>
+                        <TouchableOpacity
+                        style={styles.buttonTouchableOpacity}
+                            onPress={() => {
+                                Actions.CreateEventScreen({userid: this.state.id});
+                            }}
+                        >
+                            <Text style={styles.btnTextWhite}>Create Event</Text>
+                        </TouchableOpacity>
+                    </View>: null }
                 </View> 
+
+
+
                 {/* User Settings Button */}
                 <View style={styles.profileButton}>
                     <TouchableOpacity
@@ -302,6 +300,14 @@ const styles = StyleSheet.create({
         marginTop: 20,
         borderRadius: 5,
         textAlign: "center",
+    },
+    BarButton: {
+        flex: 1,
+        height: 120,
+        backgroundColor: "rgba(0,0,0,0.3)",
+        justifyContent: "center",
+        fontWeight: "bold",
+        alignItems: "center"
     },
     CreateEventButton: {
         width: '59%',
@@ -374,8 +380,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         bottom: 2,
         left: 0,
-        flex: 1,
-        width: 184,
+        // flex: 1,
+        width: '100%',
         height:110,
         flexDirection: 'row',
         justifyContent: 'space-between'

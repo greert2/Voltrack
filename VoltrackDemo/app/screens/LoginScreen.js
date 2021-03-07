@@ -76,6 +76,7 @@ class LoginScreen extends Component {
                                 Actions.HomeScreen({username: this.state.username, socket: connection});
                             }else {
                                 socket.off('authorized'); // remove this listener now, we're done
+                                alert("Incorrect username/password combination"); // we should change this, but toasts weren't working
                                 // showToast()
                             }
                                     
