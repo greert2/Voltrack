@@ -12,6 +12,7 @@ import userSettingsScreen from './app/screens/UserSettings';
 import setLocationScreen from './app/screens/SetLocationScreen';
 import EventPageScreen from './app/screens/EventPageScreen';
 import socketIO from 'socket.io-client';
+console.disableYellowBox = true;
 
 
 export default function App() {

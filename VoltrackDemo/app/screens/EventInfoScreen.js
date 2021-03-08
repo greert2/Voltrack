@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacity, ScrolView} from 'react-native';
+import { ImageBackground, StyleSheet, View, Button, Image, Text, TouchableOpacity, ScrolView, FlatList} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Actions, Router, Scene } from "react-native-router-flux";
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
@@ -19,13 +19,44 @@ class EventInfoScreen extends Component {
             eventName: '',
             eventDescription: '',
             eventLocation: '',
+            event: {
+                id: '',
+                name: 'no event joined :(',
+                users: []
+            },
+            membersStr: ''
         }
     }
 
     componentDidMount() {
-        
+        var connection = this.props.socket; // get our connection
         
         var that = this; // save the context so we can access it in a function
+
+        // Get the users in the event
+        connection.getUsersInEvent(this.props.eventid)
+        .then(function(result) {
+            console.log("Got this: " + result[0].firstname);
+            // got users in event
+            // Create a string to display the list of members
+            let membersString = '';
+            for(let i = 0; i < result.length; i++) {
+                membersString += result[i].firstname + " " + result[i].lastname;
+                // Not the last person in the list yet. Separate them with a comma
+                if(i < result.length - 1) {
+                    membersString += ", ";
+                }
+            }
+            // Update the state equivalent, this will refresh the UI
+            that.setState({
+                membersStr: membersString
+            });
+        })
+        .catch(function(err) {
+            console.log(err);
+        })
+
+        
 
     }
 
@@ -57,7 +88,7 @@ class EventInfoScreen extends Component {
                     <View style={styles.container}>
                         <Text style={styles.logo}>Event Information</Text>
                         <View style={styles.mainPanel}>
-                            
+
                             <Text style={styles.title3}> 
                             {this.props.eventName}
                             </Text>
@@ -73,14 +104,8 @@ class EventInfoScreen extends Component {
                             Members
                             </Text>
                             {/* members Textbox */}
-                                <Text style={styles.DesBox2}>
-                                    We got
-                                    Laura,
-                                    Carlos,
-                                    Hao,
-                                    Tyler.
-                                    The whole crew.
-                                </Text>
+                            <Text style = {styles.DesBox2}>
+                                {this.state.membersStr}</Text>
                             <Text style={styles.emptyBox}>
                             </Text>
                                     <MapView
@@ -348,7 +373,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
     },
     logo: {
-        marginTop: 40,
+        marginTop: 0,
         fontSize: 24,
         fontWeight: "bold",
         color: "black",
@@ -424,6 +449,11 @@ const styles = StyleSheet.create({
         bottom: 875,
         
       },
+      listItemContainer: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "center"
+    },
 });
 
 export default EventInfoScreen;
