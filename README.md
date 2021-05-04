@@ -1,5 +1,6 @@
 # Voltrack 
-![alt text](https://tylergreer.me/images/VoltrackLogo_50.png "Logo Title Text 1") 
+![VoltrackLogo](https://user-images.githubusercontent.com/35315874/116964767-235c7880-ac61-11eb-807c-c8814e61e86a.png)
+
 
 A mobile application created in React Native that helps Volunteers and Volunteer Organizations stay connected during an event.
 
@@ -13,9 +14,10 @@ A mobile application created in React Native that helps Volunteers and Volunteer
 
 
 #### Screenshots
-![alt text](https://tylergreer.me/images/voltrack-screen-1 "Logo Title Text 1") 
-![alt text](https://tylergreer.me/images/voltrack-screen-2.png "Logo Title Text 1") 
-![alt text](https://tylergreer.me/images/voltrack-screen-3.png "Logo Title Text 1") 
+![the login and registering screen](https://user-images.githubusercontent.com/35315874/116964538-9f09f580-ac60-11eb-8f2f-2073f51c52ff.png "Login/Register screen")
+![The main screen](https://user-images.githubusercontent.com/35315874/116964659-edb78f80-ac60-11eb-9dba-0f8fc45b4b67.png "The main screen")
+![The map scren](https://user-images.githubusercontent.com/35315874/116964595-ccef3a00-ac60-11eb-8d84-60179236bdd7.png "Map view of event")
+
 
 ### The Server
 The server is written in JavaScript and utilizes socket.io for networking between the server and client.  
