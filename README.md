@@ -17,6 +17,9 @@ A mobile application created in React Native that helps Volunteers and Volunteer
 ![the login and registering screen](https://user-images.githubusercontent.com/35315874/116964538-9f09f580-ac60-11eb-8f2f-2073f51c52ff.png "Login/Register screen")
 ![The main screen](https://user-images.githubusercontent.com/35315874/116964659-edb78f80-ac60-11eb-9dba-0f8fc45b4b67.png "The main screen")
 ![The map scren](https://user-images.githubusercontent.com/35315874/116964595-ccef3a00-ac60-11eb-8d84-60179236bdd7.png "Map view of event")
+![The user information screen](https://user-images.githubusercontent.com/35315874/117048903-5c7c0380-acc8-11eb-8ee4-3b2d4c741c0f.png "The user info screen")
+
+
 
 
 ### The Server
